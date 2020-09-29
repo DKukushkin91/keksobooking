@@ -1,5 +1,20 @@
 'use strict';
 
+const getRandomAvatar = new Set();
+const getUniqueRandomAvatar = function (max = 8, min = 1) {
+  const randomAvatar = Math.floor(Math.random() * (max - min) + min);
+  if (getRandomAvatar.has(randomAvatar)) {
+    return getUniqueRandomAvatar(max, min);
+  } else {
+    getRandomAvatar.add(randomAvatar);
+    return randomAvatar;
+  }
+};
+
+const getRandomNumbers = function (min, max) {
+  return Math.random() * (max - min) + min;
+};
+
 const AVATAR_AUTHOR = `img/avatars/user0${getUniqueRandomAvatar()}.png`;
 const TITLE_OFFER = ``;
 const ADDRES_OFFER = `{{location.x}}, {{location.y}}`;
@@ -25,21 +40,6 @@ const PHOTOS_OFFER = [
 ];
 const LOCATION_X = getRandomNumbers();
 const LOCATION_Y = function getRandomY(min = 160, max = 630) {
-  return Math.random() * (max - min) + min;
-};
-
-const getRandomAvatar = new Set();
-const getUniqueRandomAvatar = function (max = 8, min = 1) {
-  const randomAvatar = Math.floor(Math.random() * (max - min) + min);
-  if (getRandomAvatar.has(randomAvatar)) {
-    return getUniqueRandomAvatar(max, min);
-  } else {
-    getRandomAvatar.add(randomAvatar);
-    return randomAvatar;
-  }
-};
-
-const getRandomNumbers = function (min, max) {
   return Math.random() * (max - min) + min;
 };
 
@@ -82,7 +82,7 @@ for (let i = 0; i <= 8; i++) {
 const getRenderPin = (style, img, alt) => {
   const pinElement = pinTemplate.cloneNode(true);
 
-  pinElement.setAttribute(style, arrPin.location);
+  pinElement.getAttribute(style);
   pinElement.setAttribute(img, AVATAR_AUTHOR);
   pinElement.setAttribute(alt, TITLE_OFFER);
   return pinElement;
