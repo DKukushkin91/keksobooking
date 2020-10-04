@@ -4,7 +4,7 @@ const WIDTH_PIN = 40;
 const HEIGHT_PIN = 40;
 const MAX_PINS = 8;
 const TITLE_OFFER = ``;
-const ADDRES_OFFER = `600, 350`;
+const ADDRESS_OFFER = `600, 350`;
 const TYPE_OFFER = [`palace`, `flat`, `house`, `bungalow`];
 const CHECKIN_OFFER = [`12.00`, `13.00`, `14.00`];
 const CHECKOUT_OFFER = CHECKIN_OFFER;
@@ -23,73 +23,77 @@ const PHOTOS_OFFER = [
   `http://o0.github.io/assets/images/tokyo/hotel3.jpg`,
 ];
 
-const getRandomAvatar = new Set();
+/* const createRandomAvatar = new Set();
 const getUniqueRandomAvatar = (max = MAX_PINS, min = 1) => {
   const randomAvatar = Math.floor(Math.random() * (max - min) + min);
-  if (getRandomAvatar.has(randomAvatar)) {
+  if (createRandomAvatar.has(randomAvatar)) {
     return getUniqueRandomAvatar(max, min);
   } else {
-    getRandomAvatar.add(randomAvatar);
+    createRandomAvatar.add(randomAvatar);
     return randomAvatar;
   }
-};
+};*/
 
 const getRandomNumbers = (min, max) => Math.random() * (max - min) + min;
 
-const avatarAutor = `img/avatars/user0${getUniqueRandomAvatar()}.png`;
-const priceOffer = getRandomNumbers();
-const roomsOffer = getRandomNumbers();
-const guestsOffer = getRandomNumbers();
-const locationX = getRandomNumbers();
-const locationY = (min = 160, max = 630) => Math.random() * (max - min) + min;
-
 const mapBooking = document.querySelector(`.map`);
 mapBooking.classList.remove(`map--faded`);
-
+const pinListElement = mapBooking.querySelector(`.map__pins`);
 const pinTemplate = document.querySelector(`#pin`)
       .content
       .querySelector(`.map__pin`);
 
-const arrPin = [];
+const getArrPin = () => {
+  const arrPin = [];
+  for (let i = 1; i <= MAX_PINS; i++) {
+    const avatarAuthor = `img/avatars/user0${i}.png`;
+    const priceOffer = getRandomNumbers(10000, 50000);
+    const roomsOffer = getRandomNumbers(1, 3);
+    const guestsOffer = getRandomNumbers(1, 2);
+    const locationX = getRandomNumbers(130, 1100);
+    const locationY = getRandomNumbers(130, 630);
 
-for (let i = 0; i <= MAX_PINS; i++) {
-  arrPin.push({
-    author: {
-      avatar: avatarAutor,
-    },
+    arrPin.push({
+      author: {
+        avatar: avatarAuthor,
+      },
 
-    offer: {
-      title: TITLE_OFFER,
-      address: ADDRES_OFFER,
-      price: priceOffer,
-      type: TYPE_OFFER,
-      rooms: roomsOffer,
-      guests: guestsOffer,
-      checkin: CHECKIN_OFFER,
-      checkout: CHECKOUT_OFFER,
-      features: FEATURES_OFFER,
-      description: DESCRIPTION_OFFER,
-      photos: PHOTOS_OFFER
-    },
+      offer: {
+        title: TITLE_OFFER,
+        address: ADDRESS_OFFER,
+        price: priceOffer,
+        type: TYPE_OFFER,
+        rooms: roomsOffer,
+        guests: guestsOffer,
+        checkin: CHECKIN_OFFER,
+        checkout: CHECKOUT_OFFER,
+        features: FEATURES_OFFER,
+        description: DESCRIPTION_OFFER,
+        photos: PHOTOS_OFFER
+      },
 
-    location: {
-      x: locationX,
-      y: locationY
-    },
-  });
-}
+      location: {
+        x: locationX,
+        y: locationY
+      },
+    });
+  }
+  return arrPin;
+};
 
 const getRenderPin = (pin) => {
   const pinElement = pinTemplate.cloneNode(true);
-  pinElement.querySelector(`img`).src = pin.author.avatarAutor;
-  pinElement.querySelector(`img`).alt = pin.offer.TITLE_OFFER;
+  pinElement.querySelector(`img`).src = pin.author.avatar.avatarAuthor;
+  pinElement.querySelector(`img`).alt = pin.offer.title.TITLE_OFFER;
   pinElement.style = `left: ${pin.location.x - (WIDTH_PIN / 2)}px; top: ${pin.location.y - HEIGHT_PIN}px;`;
+
+  return pinElement;
 };
 
 const fragmentPin = document.createDocumentFragment();
 
-for (let pin of arrPin) {
+for (let pin of getArrPin()) {
   fragmentPin.appendChild(getRenderPin(pin));
 }
 
-pinTemplate.appendChild(fragmentPin);
+pinListElement.appendChild(fragmentPin);
