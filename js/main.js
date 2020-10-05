@@ -4,7 +4,7 @@ const WIDTH_PIN = 40;
 const HEIGHT_PIN = 40;
 const MAX_PINS = 8;
 const TITLE_OFFER = ``;
-const ADDRESS_OFFER = `600, 350`;
+const ADDRESS_OFFER = `{{location.x}}, {{location.y}}`;
 const TYPE_OFFER = [`palace`, `flat`, `house`, `bungalow`];
 const CHECKIN_OFFER = [`12.00`, `13.00`, `14.00`];
 const CHECKOUT_OFFER = CHECKIN_OFFER;
@@ -22,17 +22,6 @@ const PHOTOS_OFFER = [
   `http://o0.github.io/assets/images/tokyo/hotel2.jpg`,
   `http://o0.github.io/assets/images/tokyo/hotel3.jpg`,
 ];
-
-/* const createRandomAvatar = new Set();
-const getUniqueRandomAvatar = (max = MAX_PINS, min = 1) => {
-  const randomAvatar = Math.floor(Math.random() * (max - min) + min);
-  if (createRandomAvatar.has(randomAvatar)) {
-    return getUniqueRandomAvatar(max, min);
-  } else {
-    createRandomAvatar.add(randomAvatar);
-    return randomAvatar;
-  }
-};*/
 
 const getRandomNumbers = (min, max) => Math.random() * (max - min) + min;
 
@@ -83,8 +72,9 @@ const getArrPin = () => {
 
 const getRenderPin = (pin) => {
   const pinElement = pinTemplate.cloneNode(true);
-  pinElement.querySelector(`img`).src = pin.author.avatar.avatarAuthor;
-  pinElement.querySelector(`img`).alt = pin.offer.title.TITLE_OFFER;
+  const pinElementSelector = pinElement.querySelector(`img`);
+  pinElementSelector.src = pin.author.avatar.avatarAuthor;
+  pinElementSelector.alt = pin.offer.title.TITLE_OFFER;
   pinElement.style = `left: ${pin.location.x - (WIDTH_PIN / 2)}px; top: ${pin.location.y - HEIGHT_PIN}px;`;
 
   return pinElement;
