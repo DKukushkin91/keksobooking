@@ -2,10 +2,19 @@
 
 const WIDTH_PIN = 40;
 const HEIGHT_PIN = 40;
+const MIN_PRICE = 10000;
+const MAX_PRICE = 50000;
+const MIN_ROOMS = 1;
+const MAX_ROOMS = 3;
+const MIN_GUEST = 1;
+const MAX_GUEST = 2;
+const MIN_XY = 130;
+const MAX_X = 1100;
+const MAX_Y = 630;
 const MAX_PINS = 8;
 const TITLE_OFFER = ``;
 const ADDRESS_OFFER = `{{location.x}}, {{location.y}}`;
-const TYPE_OFFER = [`palace`, `flat`, `house`, `bungalow`];
+const TYPES_OFFER = [`palace`, `flat`, `house`, `bungalow`];
 const CHECKIN_OFFER = [`12.00`, `13.00`, `14.00`];
 const CHECKOUT_OFFER = CHECKIN_OFFER;
 const FEATURES_OFFER = [
@@ -36,11 +45,12 @@ const getArrPin = () => {
   const arrPin = [];
   for (let i = 1; i <= MAX_PINS; i++) {
     const avatarAuthor = `img/avatars/user0${i}.png`;
-    const priceOffer = getRandomNumbers(10000, 50000);
-    const roomsOffer = getRandomNumbers(1, 3);
-    const guestsOffer = getRandomNumbers(1, 2);
-    const locationX = getRandomNumbers(130, 1100);
-    const locationY = getRandomNumbers(130, 630);
+    const priceOffer = getRandomNumbers(MIN_PRICE, MAX_PRICE);
+    const roomsOffer = getRandomNumbers(MIN_ROOMS, MAX_ROOMS);
+    const guestsOffer = getRandomNumbers(MIN_GUEST, MAX_GUEST);
+    const locationX = getRandomNumbers(MIN_XY, MAX_X);
+    const locationY = getRandomNumbers(MIN_XY, MAX_Y);
+    const typeOffer = TYPES_OFFER[Math.floor(Math.random() * TYPES_OFFER.length)];
 
     arrPin.push({
       author: {
@@ -51,7 +61,7 @@ const getArrPin = () => {
         title: TITLE_OFFER,
         address: ADDRESS_OFFER,
         price: priceOffer,
-        type: TYPE_OFFER,
+        type: typeOffer,
         rooms: roomsOffer,
         guests: guestsOffer,
         checkin: CHECKIN_OFFER,
@@ -73,8 +83,8 @@ const getArrPin = () => {
 const getRenderPin = (pin) => {
   const pinElement = pinTemplate.cloneNode(true);
   const pinElementSelector = pinElement.querySelector(`img`);
-  pinElementSelector.src = pin.author.avatar.avatarAuthor;
-  pinElementSelector.alt = pin.offer.title.TITLE_OFFER;
+  pinElementSelector.src = pin.author.avatar;
+  pinElementSelector.alt = pin.offer.title;
   pinElement.style = `left: ${pin.location.x - (WIDTH_PIN / 2)}px; top: ${pin.location.y - HEIGHT_PIN}px;`;
 
   return pinElement;
