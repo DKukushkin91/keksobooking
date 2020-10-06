@@ -2,15 +2,6 @@
 
 const WIDTH_PIN = 40;
 const HEIGHT_PIN = 40;
-const MIN_PRICE = 10000;
-const MAX_PRICE = 50000;
-const MIN_ROOMS = 1;
-const MAX_ROOMS = 3;
-const MIN_GUEST = 1;
-const MAX_GUEST = 2;
-const MIN_XY = 130;
-const MAX_X = 1100;
-const MAX_Y = 630;
 const MAX_PINS = 8;
 const TITLE_OFFER = ``;
 const ADDRESS_OFFER = `{{location.x}}, {{location.y}}`;
@@ -32,7 +23,32 @@ const PHOTOS_OFFER = [
   `http://o0.github.io/assets/images/tokyo/hotel3.jpg`,
 ];
 
+const Price = {
+  MIN_PRICE: 10000,
+  MAX_PRICE: 50000,
+};
+const Rooms = {
+  MIN_ROOMS: 1,
+  MAX_ROOMS: 3,
+};
+
+const Guest = {
+  MIN_GUEST: 1,
+  MAX_GUEST: 2,
+};
+
+const LocationX = {
+  MIN_X: 130,
+  MAX_X: 1100,
+};
+
+const LocationY = {
+  MIN_Y: 130,
+  MAX_Y: 630,
+};
+
 const getRandomNumbers = (min, max) => Math.random() * (max - min) + min;
+const randomFloor = Math.floor;
 
 const mapBooking = document.querySelector(`.map`);
 mapBooking.classList.remove(`map--faded`);
@@ -41,18 +57,12 @@ const pinTemplate = document.querySelector(`#pin`)
       .content
       .querySelector(`.map__pin`);
 
-const getArrPin = () => {
-  const arrPin = [];
+const getPins = () => {
+  const pins = [];
   for (let i = 1; i <= MAX_PINS; i++) {
     const avatarAuthor = `img/avatars/user0${i}.png`;
-    const priceOffer = getRandomNumbers(MIN_PRICE, MAX_PRICE);
-    const roomsOffer = getRandomNumbers(MIN_ROOMS, MAX_ROOMS);
-    const guestsOffer = getRandomNumbers(MIN_GUEST, MAX_GUEST);
-    const locationX = getRandomNumbers(MIN_XY, MAX_X);
-    const locationY = getRandomNumbers(MIN_XY, MAX_Y);
-    const typeOffer = TYPES_OFFER[Math.floor(Math.random() * TYPES_OFFER.length)];
 
-    arrPin.push({
+    pins.push({
       author: {
         avatar: avatarAuthor,
       },
@@ -60,24 +70,24 @@ const getArrPin = () => {
       offer: {
         title: TITLE_OFFER,
         address: ADDRESS_OFFER,
-        price: priceOffer,
-        type: typeOffer,
-        rooms: roomsOffer,
-        guests: guestsOffer,
-        checkin: CHECKIN_OFFER,
-        checkout: CHECKOUT_OFFER,
+        price: getRandomNumbers(Price.MIN_PRICE, Price.MAX_PRICE),
+        type: TYPES_OFFER[randomFloor(Math.random() * TYPES_OFFER.length)],
+        rooms: getRandomNumbers(Rooms.MIN_ROOMS, Rooms.MAX_ROOMS),
+        guests: getRandomNumbers(Guest.MIN_GUEST, Guest.MAX_GUEST),
+        checkin: CHECKIN_OFFER[randomFloor(Math.random() * CHECKIN_OFFER.length)],
+        checkout: CHECKOUT_OFFER[randomFloor(Math.random() * CHECKOUT_OFFER.length)],
         features: FEATURES_OFFER,
         description: DESCRIPTION_OFFER,
         photos: PHOTOS_OFFER
       },
 
       location: {
-        x: locationX,
-        y: locationY
+        x: getRandomNumbers(LocationX.MIN_X, LocationX.MAX_X),
+        y: getRandomNumbers(LocationY.MIN_Y, LocationY.MAX_Y)
       },
     });
   }
-  return arrPin;
+  return pins;
 };
 
 const getRenderPin = (pin) => {
@@ -92,7 +102,7 @@ const getRenderPin = (pin) => {
 
 const fragmentPin = document.createDocumentFragment();
 
-for (let pin of getArrPin()) {
+for (let pin of getPins()) {
   fragmentPin.appendChild(getRenderPin(pin));
 }
 
