@@ -4,7 +4,6 @@ const WIDTH_PIN = 40;
 const HEIGHT_PIN = 40;
 const MAX_PINS = 8;
 const TITLE_OFFER = ``;
-const ADDRESS_OFFER = `{{location.x}}, {{location.y}}`;
 const TYPES_OFFER = [`palace`, `flat`, `house`, `bungalow`];
 const CHECKIN_OFFER = [`12.00`, `13.00`, `14.00`];
 const CHECKOUT_OFFER = CHECKIN_OFFER;
@@ -61,6 +60,10 @@ const getPins = () => {
   const pins = [];
   for (let i = 1; i <= MAX_PINS; i++) {
     const avatarAuthor = `img/avatars/user0${i}.png`;
+    const Сoordinate = {
+      X: getRandomNumbers(LocationX.MIN_X, LocationX.MAX_X),
+      Y: getRandomNumbers(LocationY.MIN_Y, LocationY.MAX_Y)
+    };
 
     pins.push({
       author: {
@@ -69,7 +72,7 @@ const getPins = () => {
 
       offer: {
         title: TITLE_OFFER,
-        address: ADDRESS_OFFER,
+        address: Сoordinate,
         price: getRandomNumbers(Price.MIN_PRICE, Price.MAX_PRICE),
         type: TYPES_OFFER[randomFloor(Math.random() * TYPES_OFFER.length)],
         rooms: getRandomNumbers(Rooms.MIN_ROOMS, Rooms.MAX_ROOMS),
@@ -82,8 +85,8 @@ const getPins = () => {
       },
 
       location: {
-        x: getRandomNumbers(LocationX.MIN_X, LocationX.MAX_X),
-        y: getRandomNumbers(LocationY.MIN_Y, LocationY.MAX_Y)
+        x: Сoordinate.X,
+        y: Сoordinate.Y
       },
     });
   }
