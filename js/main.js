@@ -72,7 +72,7 @@ const getPins = () => {
 
       offer: {
         title: TITLE_OFFER,
-        address: Сoordinate,
+        address: `${Сoordinate.X}, ${Сoordinate.Y}`,
         price: getRandomNumbers(Price.MIN_PRICE, Price.MAX_PRICE),
         type: TYPES_OFFER[randomFloor(Math.random() * TYPES_OFFER.length)],
         rooms: getRandomNumbers(Rooms.MIN_ROOMS, Rooms.MAX_ROOMS),
