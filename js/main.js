@@ -91,8 +91,6 @@ function getPins() {
   return pins;
 }
 
-console.log(getPins());
-
 const getRenderPin = (pin) => {
   const pinElement = pinTemplate.cloneNode(true);
   const pinElementSelector = pinElement.querySelector(`img`);
