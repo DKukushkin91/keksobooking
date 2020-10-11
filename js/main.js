@@ -134,7 +134,7 @@ const getRenderCard = (card) => {
   cardElement.querySelector(`.popup__text--time`).textContent = `Заезд после ${card.offer.checkin}, выезд до ${card.offer.checkout}`;
   cardElement.querySelector(`.popup__feature`).textContent = card.offer.features;
   cardElement.querySelector(`.popup__description`).textContent = card.offer.description;
-  cardElement.querySelector(`.popup__photos`).src = card.offer.photos;
+  cardElement.querySelector(`.popup__photo`).src = card.offer.photos;
   cardElement.querySelector(`.popup__avatar`).src = card.author.avatar;
   return cardElement;
 };
