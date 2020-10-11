@@ -124,6 +124,7 @@ const offerType = {
 };
 
 const getRenderCard = (card) => {
+
   const cardElement = cardTemplate.cloneNode(true);
   cardElement.querySelector(`.popup__title`).textContent = card.offer.title;
   cardElement.querySelector(`.popup__text--address`).textContent = card.offer.address;
@@ -134,7 +135,7 @@ const getRenderCard = (card) => {
   cardElement.querySelector(`.popup__feature`).textContent = card.offer.features;
   cardElement.querySelector(`.popup__description`).textContent = card.offer.description;
   cardElement.querySelector(`.popup__photos`).src = card.offer.photos;
-  cardElement.querySelector(`.popup__avatar`).src = getPins().avatarAuthor;
+  cardElement.querySelector(`.popup__avatar`).src = card.author.avatar;
   return cardElement;
 };
 
