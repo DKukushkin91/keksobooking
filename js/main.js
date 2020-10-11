@@ -3,10 +3,16 @@
 const WIDTH_PIN = 40;
 const HEIGHT_PIN = 40;
 const MAX_PINS = 8;
-const TITLE_OFFER = ``;
+const TITLE_OFFER = `Лучшее предложение!`;
 const TYPES_OFFER = [`palace`, `flat`, `house`, `bungalow`];
 const CHECKIN_OFFER = [`12.00`, `13.00`, `14.00`];
 const CHECKOUT_OFFER = CHECKIN_OFFER;
+const DESCRIPTION_OFFER = `Всё включено!`;
+const PHOTOS_OFFER = [
+  `http://o0.github.io/assets/images/tokyo/hotel1.jpg`,
+  `http://o0.github.io/assets/images/tokyo/hotel2.jpg`,
+  `http://o0.github.io/assets/images/tokyo/hotel3.jpg`,
+];
 const FEATURES_OFFER = [
   `wifi`,
   `dishwasher`,
@@ -15,39 +21,34 @@ const FEATURES_OFFER = [
   `elevator`,
   `conditioner`,
 ];
-const DESCRIPTION_OFFER = ``;
-const PHOTOS_OFFER = [
-  `http://o0.github.io/assets/images/tokyo/hotel1.jpg`,
-  `http://o0.github.io/assets/images/tokyo/hotel2.jpg`,
-  `http://o0.github.io/assets/images/tokyo/hotel3.jpg`,
-];
 
 const Price = {
-  MIN_PRICE: 10000,
-  MAX_PRICE: 50000,
+  MIN: 10000,
+  MAX: 50000,
 };
-const Rooms = {
-  MIN_ROOMS: 1,
-  MAX_ROOMS: 3,
+const Room = {
+  MIN: 1,
+  MAX: 3,
 };
 
 const Guest = {
-  MIN_GUEST: 1,
-  MAX_GUEST: 2,
+  MIN: 1,
+  MAX: 2,
 };
 
 const LocationX = {
-  MIN_X: 130,
-  MAX_X: 1100,
+  MIN: 130,
+  MAX: 1100,
 };
 
 const LocationY = {
-  MIN_Y: 130,
-  MAX_Y: 630,
+  MIN: 130,
+  MAX: 630,
 };
 
-const getRandomNumbers = (min, max) => Math.random() * (max - min) + min;
-const randomFloor = Math.floor;
+const getRandomNumbers = (min, max) => Math.round(Math.random() * (max - min) + min);
+const getRandomItem = (items) => items[Math.round(Math.floor(Math.random() * items.length))];
+const getRandom = (arr) => arr.slice(0, getRandomNumbers(1, arr.length));
 
 const mapBooking = document.querySelector(`.map`);
 mapBooking.classList.remove(`map--faded`);
@@ -56,13 +57,13 @@ const pinTemplate = document.querySelector(`#pin`)
       .content
       .querySelector(`.map__pin`);
 
-const getPins = () => {
+function getPins() {
   const pins = [];
   for (let i = 1; i <= MAX_PINS; i++) {
     const avatarAuthor = `img/avatars/user0${i}.png`;
-    const Сoordinate = {
-      X: getRandomNumbers(LocationX.MIN_X, LocationX.MAX_X),
-      Y: getRandomNumbers(LocationY.MIN_Y, LocationY.MAX_Y)
+    const location = {
+      x: getRandomNumbers(LocationX.MIN, LocationX.MAX),
+      y: getRandomNumbers(LocationY.MIN, LocationY.MAX)
     };
 
     pins.push({
@@ -72,33 +73,33 @@ const getPins = () => {
 
       offer: {
         title: TITLE_OFFER,
-        address: `${Сoordinate.X}, ${Сoordinate.Y}`,
-        price: getRandomNumbers(Price.MIN_PRICE, Price.MAX_PRICE),
-        type: TYPES_OFFER[randomFloor(Math.random() * TYPES_OFFER.length)],
-        rooms: getRandomNumbers(Rooms.MIN_ROOMS, Rooms.MAX_ROOMS),
-        guests: getRandomNumbers(Guest.MIN_GUEST, Guest.MAX_GUEST),
-        checkin: CHECKIN_OFFER[randomFloor(Math.random() * CHECKIN_OFFER.length)],
-        checkout: CHECKOUT_OFFER[randomFloor(Math.random() * CHECKOUT_OFFER.length)],
-        features: FEATURES_OFFER,
+        address: `${location.x}, ${location.y}`,
+        price: getRandomNumbers(Price.MIN, Price.MAX),
+        type: getRandomItem(TYPES_OFFER),
+        rooms: getRandomNumbers(Room.MIN, Room.MAX),
+        guests: getRandomNumbers(Guest.MIN, Guest.MAX),
+        checkin: getRandomItem(CHECKIN_OFFER),
+        checkout: getRandomItem(CHECKOUT_OFFER),
+        features: getRandom(FEATURES_OFFER),
         description: DESCRIPTION_OFFER,
-        photos: PHOTOS_OFFER
+        photos: getRandom(PHOTOS_OFFER)
       },
 
-      location: {
-        x: Сoordinate.X,
-        y: Сoordinate.Y
-      },
+      location
     });
   }
   return pins;
-};
+}
+
+console.log(getPins());
 
 const getRenderPin = (pin) => {
   const pinElement = pinTemplate.cloneNode(true);
   const pinElementSelector = pinElement.querySelector(`img`);
   pinElementSelector.src = pin.author.avatar;
   pinElementSelector.alt = pin.offer.title;
-  pinElement.style = `left: ${pin.location.x - (WIDTH_PIN / 2)}px; top: ${pin.location.y - HEIGHT_PIN}px;`;
+  pinElement.style.left = `${pin.location.x - (WIDTH_PIN / 2)}px`;
+  pinElement.style.top = `${pin.location.y - HEIGHT_PIN}px`;
 
   return pinElement;
 };
