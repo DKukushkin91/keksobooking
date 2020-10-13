@@ -129,7 +129,7 @@ const getCreateCardPhotos = (photos) => {
         .content
         .querySelector(`.popup__photo`);
   photos.forEach((photo) => {
-    let photoTemplate = template.cloneNode(true);
+    const photoTemplate = template.cloneNode(true);
     photoTemplate.src = photo;
     fragment.appendChild(photoTemplate);
   });
