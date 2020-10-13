@@ -104,8 +104,9 @@ const getRenderPin = (pin) => {
 };
 
 const fragmentPin = document.createDocumentFragment();
+const pins = getPins();
 
-for (let pin of getPins()) {
+for (let pin of pins) {
   fragmentPin.appendChild(getRenderPin(pin));
 }
 
@@ -127,25 +128,23 @@ const getCreateCardPhotos = (photos) => {
   const template = document.querySelector(`#card`)
         .content
         .querySelector(`.popup__photo`);
-  for (let i = 1; i < photos.length; i++) {
+  photos.forEach((photo) => {
     let photoTemplate = template.cloneNode(true);
-    photoTemplate.src = photos[i];
+    photoTemplate.src = photo;
     fragment.appendChild(photoTemplate);
-  }
+  });
   return fragment;
 };
 
-const getCreateCardfeatures = (features) => {
+const getCreatedCardFeatures = (features) => {
   const fragment = document.createDocumentFragment();
-  const template = document.querySelector(`#card`)
-        .content
-        .querySelector(`.popup__feature`);
-  for (let i = 0; i < features.length; i++) {
-    let featureTemplate = template.cloneNode(true);
-    featureTemplate.src = features[i];
-    fragment.appendChild(featureTemplate);
-    console.log(features[i]);
-  }
+
+  features.forEach((feature) => {
+    const featureItem = document.createElement(`li`);
+    featureItem.classList.add(`popup__feature`);
+    featureItem.classList.add(`popup__feature--${feature}`);
+    fragment.appendChild(featureItem);
+  });
   return fragment;
 };
 
@@ -153,7 +152,6 @@ const getRenderCard = (card) => {
   const cardElement = cardTemplate.cloneNode(true);
   const photoElement = cardElement.querySelector(`.popup__photos`).querySelector(`.popup__photo`);
   cardElement.querySelector(`.popup__photos`).removeChild(photoElement);
-  cardElement.querySelector(`.popup__features`).innerText = ``;
 
   cardElement.querySelector(`.popup__title`).textContent = card.offer.title;
   cardElement.querySelector(`.popup__text--address`).textContent = card.offer.address;
@@ -161,17 +159,11 @@ const getRenderCard = (card) => {
   cardElement.querySelector(`.popup__type`).textContent = offerType[card.offer.type];
   cardElement.querySelector(`.popup__text--capacity`).textContent = `${card.offer.rooms} комнаты для ${card.offer.guests} гостей`;
   cardElement.querySelector(`.popup__text--time`).textContent = `Заезд после ${card.offer.checkin}, выезд до ${card.offer.checkout}`;
-  cardElement.querySelector(`.popup__features`).appendChild(getCreateCardfeatures(card.offer.features));
+  cardElement.querySelector(`.popup__features`).appendChild(getCreatedCardFeatures(card.offer.features));
   cardElement.querySelector(`.popup__description`).textContent = card.offer.description;
   cardElement.querySelector(`.popup__photos`).appendChild(getCreateCardPhotos(card.offer.photos));
   cardElement.querySelector(`.popup__avatar`).src = card.author.avatar;
   return cardElement;
 };
 
-const fragmentCard = document.createDocumentFragment();
-
-for (let card of getPins()) {
-  fragmentCard.appendChild(getRenderCard(card));
-}
-
-mapBooking.insertBefore(fragmentCard, cardListElement);
+mapBooking.insertBefore(getRenderCard(pins[0]), cardListElement);
