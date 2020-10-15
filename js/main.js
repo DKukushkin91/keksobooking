@@ -50,9 +50,9 @@ const getRandomNumbers = (min, max) => Math.round(Math.random() * (max - min) + 
 const getRandomItem = (items) => items[Math.round(Math.floor(Math.random() * items.length))];
 const getRandom = (arr) => arr.slice(0, getRandomNumbers(1, arr.length));
 
-const mapBooking = document.querySelector(`.map`);
-mapBooking.classList.remove(`map--faded`);
+const createPin = () => pinListElement.appendChild(fragmentPin);
 
+const mapBooking = document.querySelector(`.map`);
 const pinListElement = mapBooking.querySelector(`.map__pins`);
 const pinTemplate = document.querySelector(`#pin`)
       .content
@@ -110,7 +110,7 @@ for (let pin of pins) {
   fragmentPin.appendChild(getRenderPin(pin));
 }
 
-pinListElement.appendChild(fragmentPin);
+/*
 const cardListElement = mapBooking.querySelector(`.map__filters-container`);
 const cardTemplate = document.querySelector(`#card`)
       .content
@@ -123,7 +123,7 @@ const offerType = {
   bungalow: `Бунгало`
 };
 
-const getCreateCardPhotos = (photos) => {
+const getCreatedCardPhotos = (photos) => {
   const fragment = document.createDocumentFragment();
   const template = document.querySelector(`#card`)
         .content
@@ -161,9 +161,65 @@ const getRenderCard = (card) => {
   cardElement.querySelector(`.popup__text--time`).textContent = `Заезд после ${card.offer.checkin}, выезд до ${card.offer.checkout}`;
   cardElement.querySelector(`.popup__features`).appendChild(getCreatedCardFeatures(card.offer.features));
   cardElement.querySelector(`.popup__description`).textContent = card.offer.description;
-  cardElement.querySelector(`.popup__photos`).appendChild(getCreateCardPhotos(card.offer.photos));
+  cardElement.querySelector(`.popup__photos`).appendChild(getCreatedCardPhotos(card.offer.photos));
   cardElement.querySelector(`.popup__avatar`).src = card.author.avatar;
   return cardElement;
 };
 
-mapBooking.insertBefore(getRenderCard(pins[0]), cardListElement);
+mapBooking.insertBefore(getRenderCard(pins[0]), cardListElement);*/
+
+const AD_FORM = document.querySelector(`.ad-form`);
+const AD_FIELDSET = AD_FORM.querySelectorAll(`fieldset`);
+const MAP_FILTERS = document.querySelector(`.map__filters`);
+const MAP_PIN = document.querySelector(`.map__pin--main`);
+const ADDRESS = AD_FORM.querySelector(`#address`);
+
+//ADDRESS.setAttribute(`value`, `${pins.offer.address}`);
+//console.log(ADDRESS);
+
+const setAttribute = (element) => {
+  for (let attribute of element) {
+    attribute.setAttribute(`disabled`, `disabled`);
+  }
+};
+
+setAttribute(AD_FIELDSET);
+setAttribute(MAP_FILTERS);
+
+const removeAttribute = (element) => {
+  for (let attribute of element) {
+    attribute.removeAttribute(`disabled`);
+  }
+};
+
+const activeForm = () => {
+  AD_FORM.classList.remove(`ad-form--disabled`);
+};
+
+const mapActive = () => {
+  mapBooking.classList.remove(`map--faded`);
+};
+
+MAP_PIN.addEventListener(`mousedown`, (evt) => {
+  if (typeof evt === `object`) {
+    switch (evt.button) {
+      case 0:
+        mapActive();
+        createPin();
+        removeAttribute(AD_FIELDSET);
+        removeAttribute(MAP_FILTERS);
+        activeForm();
+        break;
+    }
+  }
+});
+
+MAP_PIN.addEventListener(`keydown`, (evt) => {
+  if (evt.key === `Enter`) {
+    mapActive();
+    createPin();
+    removeAttribute(AD_FIELDSET);
+    removeAttribute(MAP_FILTERS);
+    activeForm();
+  }
+});
