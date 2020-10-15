@@ -174,8 +174,8 @@ const MAP_FILTERS = document.querySelector(`.map__filters`);
 const MAP_PIN = document.querySelector(`.map__pin--main`);
 const ADDRESS = AD_FORM.querySelector(`#address`);
 
-//ADDRESS.setAttribute(`value`, `${pins.offer.address}`);
-//console.log(ADDRESS);
+// ADDRESS.setAttribute(`value`, `${pins.offer.address}`);
+// console.log(ADDRESS);
 
 const setAttribute = (element) => {
   for (let attribute of element) {
