@@ -172,7 +172,7 @@ const AD_FORM = document.querySelector(`.ad-form`);
 const AD_FIELDSET = AD_FORM.querySelectorAll(`fieldset`);
 const MAP_FILTERS = document.querySelector(`.map__filters`);
 const MAP_PIN = document.querySelector(`.map__pin--main`);
-const ADDRESS = AD_FORM.querySelector(`#address`);
+// const ADDRESS = AD_FORM.querySelector(`#address`);
 
 // ADDRESS.setAttribute(`value`, `${pins.offer.address}`);
 // console.log(ADDRESS);
