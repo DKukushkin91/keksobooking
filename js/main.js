@@ -172,10 +172,14 @@ const AD_FORM = document.querySelector(`.ad-form`);
 const AD_FIELDSET = AD_FORM.querySelectorAll(`fieldset`);
 const MAP_FILTERS = document.querySelector(`.map__filters`);
 const MAP_PIN = document.querySelector(`.map__pin--main`);
-// const ADDRESS = AD_FORM.querySelector(`#address`);
+const ADDRESS = AD_FORM.querySelector(`#address`);
+const ROOM_NUMBER = AD_FORM.querySelector(`#room_number`);
+const CAPACITY = AD_FORM.querySelector(`#capacity`);
+const SUBMIT = AD_FORM.querySelector(`.ad-form__submit`);
 
-// ADDRESS.setAttribute(`value`, `${pins.offer.address}`);
-// console.log(ADDRESS);
+const writeAddress = (addressX, addressY) => {
+  ADDRESS.value = (`${addressX}, ${addressY}`);
+};
 
 const setAttribute = (element) => {
   for (let attribute of element) {
@@ -200,15 +204,20 @@ const mapActive = () => {
   mapBooking.classList.remove(`map--faded`);
 };
 
+const activeMap = () => {
+  mapActive();
+  createPin();
+  removeAttribute(AD_FIELDSET);
+  removeAttribute(MAP_FILTERS);
+  activeForm();
+};
+
 MAP_PIN.addEventListener(`mousedown`, (evt) => {
   if (typeof evt === `object`) {
     switch (evt.button) {
       case 0:
-        mapActive();
-        createPin();
-        removeAttribute(AD_FIELDSET);
-        removeAttribute(MAP_FILTERS);
-        activeForm();
+        activeMap();
+        writeAddress(evt.x, evt.y);
         break;
     }
   }
@@ -216,10 +225,19 @@ MAP_PIN.addEventListener(`mousedown`, (evt) => {
 
 MAP_PIN.addEventListener(`keydown`, (evt) => {
   if (evt.key === `Enter`) {
-    mapActive();
-    createPin();
-    removeAttribute(AD_FIELDSET);
-    removeAttribute(MAP_FILTERS);
-    activeForm();
+    activeMap();
+    writeAddress(`${MAP_PIN.offsetLeft}, ${MAP_PIN.offsetTop}`);
   }
+});
+
+const validationOfRoomsAndGuests = () => {
+  if (ROOM_NUMBER.value < CAPACITY.value || ROOM_NUMBER.value === `100` && CAPACITY.value !== `0`) {
+    ROOM_NUMBER.setCustomValidity(`Количество гостей, не должно привышать количество комнат, 100 комнат не для гостей`);
+  } else {
+    ROOM_NUMBER.setCustomValidity(``);
+  }
+};
+
+SUBMIT.addEventListener(`click`, () => {
+  validationOfRoomsAndGuests();
 });
