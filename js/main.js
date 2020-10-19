@@ -168,76 +168,68 @@ const getRenderCard = (card) => {
 
 mapBooking.insertBefore(getRenderCard(pins[0]), cardListElement);*/
 
-const AD_FORM = document.querySelector(`.ad-form`);
-const AD_FIELDSET = AD_FORM.querySelectorAll(`fieldset`);
-const MAP_FILTERS = document.querySelector(`.map__filters`);
-const MAP_PIN = document.querySelector(`.map__pin--main`);
-const ADDRESS = AD_FORM.querySelector(`#address`);
-const ROOM_NUMBER = AD_FORM.querySelector(`#room_number`);
-const CAPACITY = AD_FORM.querySelector(`#capacity`);
-const SUBMIT = AD_FORM.querySelector(`.ad-form__submit`);
+const adForm = document.querySelector(`.ad-form`);
+const adFieldset = adForm.querySelectorAll(`fieldset`);
+const mapFilters = document.querySelector(`.map__filters`);
+const mapPin = document.querySelector(`.map__pin--main`);
+const addressField = adForm.querySelector(`#address`);
+const roomNumber = adForm.querySelector(`#room_number`);
+const capacity = adForm.querySelector(`#capacity`);
+const submit = adForm.querySelector(`.ad-form__submit`);
 
 const writeAddress = (addressX, addressY) => {
-  ADDRESS.value = (`${addressX}, ${addressY}`);
+  addressField.value = `${addressX}, ${addressY}`;
 };
 
-const setAttribute = (element) => {
-  for (let attribute of element) {
-    attribute.setAttribute(`disabled`, `disabled`);
+const setDisabled = (element, shouldDisable) => {
+  for (let value of element) {
+    value.disabled = shouldDisable;
   }
 };
 
-setAttribute(AD_FIELDSET);
-setAttribute(MAP_FILTERS);
+setDisabled(adFieldset, true);
+setDisabled(mapFilters, true);
 
-const removeAttribute = (element) => {
-  for (let attribute of element) {
-    attribute.removeAttribute(`disabled`);
-  }
+const getActiveForm = () => {
+  adForm.classList.remove(`ad-form--disabled`);
 };
 
-const activeForm = () => {
-  AD_FORM.classList.remove(`ad-form--disabled`);
-};
-
-const mapActive = () => {
+const getMapActive = () => {
   mapBooking.classList.remove(`map--faded`);
 };
 
-const activeMap = () => {
-  mapActive();
+const getActivePage = () => {
+  getMapActive();
   createPin();
-  removeAttribute(AD_FIELDSET);
-  removeAttribute(MAP_FILTERS);
-  activeForm();
+  setDisabled(adFieldset, false);
+  setDisabled(mapFilters, false);
+  getActiveForm();
 };
 
-MAP_PIN.addEventListener(`mousedown`, (evt) => {
-  if (typeof evt === `object`) {
-    switch (evt.button) {
-      case 0:
-        activeMap();
-        writeAddress(evt.x, evt.y);
-        break;
-    }
+mapPin.addEventListener(`mousedown`, (evt) => {
+  if (evt.button === 0) {
+    getActivePage();
+    writeAddress(evt.x, evt.y);
   }
 });
 
-MAP_PIN.addEventListener(`keydown`, (evt) => {
+mapPin.addEventListener(`keydown`, (evt) => {
   if (evt.key === `Enter`) {
-    activeMap();
-    writeAddress(`${MAP_PIN.offsetLeft}, ${MAP_PIN.offsetTop}`);
+    getActivePage();
+    writeAddress(mapPin.offsetLeft, mapPin.offsetTop);
   }
 });
 
 const validationOfRoomsAndGuests = () => {
-  if (ROOM_NUMBER.value < CAPACITY.value || ROOM_NUMBER.value === `100` && CAPACITY.value !== `0`) {
-    ROOM_NUMBER.setCustomValidity(`Количество гостей, не должно привышать количество комнат, 100 комнат не для гостей`);
-  } else {
-    ROOM_NUMBER.setCustomValidity(``);
+  let validationMessage = ``;
+
+  if (roomNumber.value < capacity.value || roomNumber.value === `100` && capacity.value !== `0`) {
+    validationMessage = `Количество гостей, не должно привышать количество комнат, 100 комнат не для гостей`;
   }
+
+  roomNumber.setCustomValidity(validationMessage);
 };
 
-SUBMIT.addEventListener(`click`, () => {
+submit.addEventListener(`click`, () => {
   validationOfRoomsAndGuests();
 });
