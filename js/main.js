@@ -173,9 +173,9 @@ const adFieldset = adForm.querySelectorAll(`fieldset`);
 const mapFilters = document.querySelector(`.map__filters`);
 const mapPin = document.querySelector(`.map__pin--main`);
 const addressField = adForm.querySelector(`#address`);
-const roomNumber = adForm.querySelector(`#room_number`);
-const capacity = adForm.querySelector(`#capacity`);
-const submit = adForm.querySelector(`.ad-form__submit`);
+const roomInput = adForm.querySelector(`#room_number`);
+const capacityInput = adForm.querySelector(`#capacity`);
+const submitButton = adForm.querySelector(`.ad-form__submit`);
 
 const writeAddress = (addressX, addressY) => {
   addressField.value = `${addressX}, ${addressY}`;
@@ -190,32 +190,32 @@ const setDisabled = (element, shouldDisable) => {
 setDisabled(adFieldset, true);
 setDisabled(mapFilters, true);
 
-const getActiveForm = () => {
+const setActiveForm = () => {
   adForm.classList.remove(`ad-form--disabled`);
 };
 
-const getMapActive = () => {
+const setMapActive = () => {
   mapBooking.classList.remove(`map--faded`);
 };
 
-const getActivePage = () => {
-  getMapActive();
+const setActivePage = () => {
+  setMapActive();
   createPin();
   setDisabled(adFieldset, false);
   setDisabled(mapFilters, false);
-  getActiveForm();
+  setActiveForm();
 };
 
 mapPin.addEventListener(`mousedown`, (evt) => {
   if (evt.button === 0) {
-    getActivePage();
+    setActivePage();
     writeAddress(evt.x, evt.y);
   }
 });
 
 mapPin.addEventListener(`keydown`, (evt) => {
   if (evt.key === `Enter`) {
-    getActivePage();
+    setActivePage();
     writeAddress(mapPin.offsetLeft, mapPin.offsetTop);
   }
 });
@@ -223,13 +223,13 @@ mapPin.addEventListener(`keydown`, (evt) => {
 const validationOfRoomsAndGuests = () => {
   let validationMessage = ``;
 
-  if (roomNumber.value < capacity.value || roomNumber.value === `100` && capacity.value !== `0`) {
+  if (roomInput.value < capacityInput.value || roomInput.value === `100` && capacityInput.value !== `0`) {
     validationMessage = `Количество гостей, не должно привышать количество комнат, 100 комнат не для гостей`;
   }
 
-  roomNumber.setCustomValidity(validationMessage);
+  roomInput.setCustomValidity(validationMessage);
 };
 
-submit.addEventListener(`click`, () => {
+submitButton.addEventListener(`click`, () => {
   validationOfRoomsAndGuests();
 });
