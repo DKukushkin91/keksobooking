@@ -50,9 +50,9 @@ const getRandomNumbers = (min, max) => Math.round(Math.random() * (max - min) + 
 const getRandomItem = (items) => items[Math.round(Math.floor(Math.random() * items.length))];
 const getRandom = (arr) => arr.slice(0, getRandomNumbers(1, arr.length));
 
-const mapBooking = document.querySelector(`.map`);
-mapBooking.classList.remove(`map--faded`);
+const createPin = () => pinListElement.appendChild(fragmentPin);
 
+const mapBooking = document.querySelector(`.map`);
 const pinListElement = mapBooking.querySelector(`.map__pins`);
 const pinTemplate = document.querySelector(`#pin`)
       .content
@@ -110,7 +110,7 @@ for (let pin of pins) {
   fragmentPin.appendChild(getRenderPin(pin));
 }
 
-pinListElement.appendChild(fragmentPin);
+/*
 const cardListElement = mapBooking.querySelector(`.map__filters-container`);
 const cardTemplate = document.querySelector(`#card`)
       .content
@@ -123,7 +123,7 @@ const offerType = {
   bungalow: `Бунгало`
 };
 
-const getCreateCardPhotos = (photos) => {
+const getCreatedCardPhotos = (photos) => {
   const fragment = document.createDocumentFragment();
   const template = document.querySelector(`#card`)
         .content
@@ -161,9 +161,75 @@ const getRenderCard = (card) => {
   cardElement.querySelector(`.popup__text--time`).textContent = `Заезд после ${card.offer.checkin}, выезд до ${card.offer.checkout}`;
   cardElement.querySelector(`.popup__features`).appendChild(getCreatedCardFeatures(card.offer.features));
   cardElement.querySelector(`.popup__description`).textContent = card.offer.description;
-  cardElement.querySelector(`.popup__photos`).appendChild(getCreateCardPhotos(card.offer.photos));
+  cardElement.querySelector(`.popup__photos`).appendChild(getCreatedCardPhotos(card.offer.photos));
   cardElement.querySelector(`.popup__avatar`).src = card.author.avatar;
   return cardElement;
 };
 
-mapBooking.insertBefore(getRenderCard(pins[0]), cardListElement);
+mapBooking.insertBefore(getRenderCard(pins[0]), cardListElement);*/
+
+const adForm = document.querySelector(`.ad-form`);
+const adFieldset = adForm.querySelectorAll(`fieldset`);
+const mapFilters = document.querySelector(`.map__filters`);
+const mapPin = document.querySelector(`.map__pin--main`);
+const addressField = adForm.querySelector(`#address`);
+const roomInput = adForm.querySelector(`#room_number`);
+const capacityInput = adForm.querySelector(`#capacity`);
+const submitButton = adForm.querySelector(`.ad-form__submit`);
+
+const writeAddress = (addressX, addressY) => {
+  addressField.value = `${addressX}, ${addressY}`;
+};
+
+const setDisabled = (element, shouldDisable) => {
+  for (let value of element) {
+    value.disabled = shouldDisable;
+  }
+};
+
+setDisabled(adFieldset, true);
+setDisabled(mapFilters, true);
+
+const setActiveForm = () => {
+  adForm.classList.remove(`ad-form--disabled`);
+};
+
+const setMapActive = () => {
+  mapBooking.classList.remove(`map--faded`);
+};
+
+const setActivePage = () => {
+  setMapActive();
+  createPin();
+  setDisabled(adFieldset, false);
+  setDisabled(mapFilters, false);
+  setActiveForm();
+};
+
+mapPin.addEventListener(`mousedown`, (evt) => {
+  if (evt.button === 0) {
+    setActivePage();
+    writeAddress(evt.x, evt.y);
+  }
+});
+
+mapPin.addEventListener(`keydown`, (evt) => {
+  if (evt.key === `Enter`) {
+    setActivePage();
+    writeAddress(mapPin.offsetLeft, mapPin.offsetTop);
+  }
+});
+
+const validationOfRoomsAndGuests = () => {
+  let validationMessage = ``;
+
+  if (roomInput.value < capacityInput.value || roomInput.value === `100` && capacityInput.value !== `0`) {
+    validationMessage = `Количество гостей, не должно привышать количество комнат, 100 комнат не для гостей`;
+  }
+
+  roomInput.setCustomValidity(validationMessage);
+};
+
+submitButton.addEventListener(`click`, () => {
+  validationOfRoomsAndGuests();
+});
