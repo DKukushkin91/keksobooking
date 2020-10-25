@@ -203,6 +203,7 @@ const addressField = adForm.querySelector(`#address`);
 const roomInput = adForm.querySelector(`#room_number`);
 const capacityInput = adForm.querySelector(`#capacity`);
 const submitButton = adForm.querySelector(`.ad-form__submit`);
+
 const typeOfHousing = adForm.querySelector(`#type`);
 const pricePerNight = adForm.querySelector(`#price`);
 
@@ -251,6 +252,7 @@ const cardCloseKeyboard = (evt) => {
     setActivePage();
     writeAddress(mapPinMain.offsetLeft, mapPinMain.offsetTop);
     mapPinMain.removeEventListener(`keydown`, cardCloseKeyboard);
+    writeAddress(mapPin.offsetLeft, mapPin.offsetTop);
   }
 };
 
@@ -260,6 +262,7 @@ const validationOfRoomsAndGuests = () => {
   let validationMessage = ``;
 
   if (roomInput.value < capacityInput.value || roomInput.value !== `100` && capacityInput.value === `0` || roomInput.value === `100` && capacityInput.value > `0`) {
+  if (roomInput.value < capacityInput.value || roomInput.value === `100` && capacityInput.value !== `0`) {
     validationMessage = `Количество гостей, не должно привышать количество комнат, 100 комнат не для гостей`;
   }
 
@@ -300,6 +303,7 @@ const validationOfTime = (evt) => {
 
 timeInInput.addEventListener(`change`, validationOfTime);
 timeOutInput.addEventListener(`change`, validationOfTime);
+
 
 submitButton.addEventListener(`click`, () => {
   validationOfRoomsAndGuests();
