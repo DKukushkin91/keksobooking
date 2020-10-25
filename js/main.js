@@ -270,19 +270,26 @@ const setElementAttribute = (element, attribute, value) => {
   element.setAttribute(attribute, value);
 };
 
+const minPrice = {
+  Bungalow: 0,
+  Flat: 1000,
+  House: 5000,
+  Palace: 10000,
+};
+
 const validationOfTypeAndPrice = () => {
   if (typeOfHousing.value === `bungalow`) {
-    setElementAttribute(pricePerNight, `placeholder`, 0);
-    setElementAttribute(pricePerNight, `min`, 0);
+    setElementAttribute(pricePerNight, `placeholder`, minPrice.Bungalow);
+    setElementAttribute(pricePerNight, `min`, minPrice.Bungalow);
   } else if (typeOfHousing.value === `flat`) {
-    setElementAttribute(pricePerNight, `placeholder`, 1000);
-    setElementAttribute(pricePerNight, `min`, 1000);
+    setElementAttribute(pricePerNight, `placeholder`, minPrice.Flat);
+    setElementAttribute(pricePerNight, `min`, minPrice.Flat);
   } else if (typeOfHousing.value === `house`) {
-    setElementAttribute(pricePerNight, `placeholder`, 5000);
-    setElementAttribute(pricePerNight, `min`, 5000);
+    setElementAttribute(pricePerNight, `placeholder`, minPrice.House);
+    setElementAttribute(pricePerNight, `min`, minPrice.House);
   } else if (typeOfHousing.value === `palace`) {
-    setElementAttribute(pricePerNight, `placeholder`, 10000);
-    setElementAttribute(pricePerNight, `min`, 10000);
+    setElementAttribute(pricePerNight, `placeholder`, minPrice.Palace);
+    setElementAttribute(pricePerNight, `min`, minPrice.Palace);
   }
 };
 
