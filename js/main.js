@@ -107,10 +107,40 @@ const fragmentPin = document.createDocumentFragment();
 const pins = getPins();
 
 for (let pin of pins) {
-  fragmentPin.appendChild(getRenderPin(pin));
+  const pinElement = getRenderPin(pin);
+
+  pinElement.addEventListener(`click`, () => {
+    const popupElement = getRenderCard(pin);
+    const closeMapCard = popupElement.querySelector(`.popup__close`);
+    mapBooking.insertBefore(popupElement, cardListElement);
+    const mapCard = document.querySelector(`.map__card`);
+
+    const removeMapCard = () => {
+      mapCard.remove();
+    };
+
+    closeMapCard.addEventListener(`click`, () => {
+      removeMapCard();
+    });
+
+    const closePopupEsc = (evt) => {
+      if (evt.key === `Escape`) {
+        removeMapCard();
+        document.removeEventListener(`keydown`, closePopupEsc);
+      }
+    };
+
+    document.addEventListener(`keydown`, closePopupEsc);
+
+    closeMapCard.addEventListener(`keydown`, (evt) => {
+      if (evt.key === `Enter`) {
+        removeMapCard();
+      }
+    });
+  });
+  fragmentPin.appendChild(pinElement);
 }
 
-/*
 const cardListElement = mapBooking.querySelector(`.map__filters-container`);
 const cardTemplate = document.querySelector(`#card`)
       .content
@@ -152,7 +182,6 @@ const getRenderCard = (card) => {
   const cardElement = cardTemplate.cloneNode(true);
   const photoElement = cardElement.querySelector(`.popup__photos`).querySelector(`.popup__photo`);
   cardElement.querySelector(`.popup__photos`).removeChild(photoElement);
-
   cardElement.querySelector(`.popup__title`).textContent = card.offer.title;
   cardElement.querySelector(`.popup__text--address`).textContent = card.offer.address;
   cardElement.querySelector(`.popup__text--price`).textContent = `${card.offer.price}₽/ночь`;
@@ -166,16 +195,16 @@ const getRenderCard = (card) => {
   return cardElement;
 };
 
-mapBooking.insertBefore(getRenderCard(pins[0]), cardListElement);*/
-
 const adForm = document.querySelector(`.ad-form`);
 const adFieldset = adForm.querySelectorAll(`fieldset`);
 const mapFilters = document.querySelector(`.map__filters`);
-const mapPin = document.querySelector(`.map__pin--main`);
+const mapPinMain = pinListElement.querySelector(`.map__pin--main`);
 const addressField = adForm.querySelector(`#address`);
-const roomNumber = adForm.querySelector(`#room_number`);
-const capacity = adForm.querySelector(`#capacity`);
-const submit = adForm.querySelector(`.ad-form__submit`);
+const roomInput = adForm.querySelector(`#room_number`);
+const capacityInput = adForm.querySelector(`#capacity`);
+const submitButton = adForm.querySelector(`.ad-form__submit`);
+const typeOfHousing = adForm.querySelector(`#type`);
+const pricePerNight = adForm.querySelector(`#price`);
 
 const writeAddress = (addressX, addressY) => {
   addressField.value = `${addressX}, ${addressY}`;
@@ -190,46 +219,89 @@ const setDisabled = (element, shouldDisable) => {
 setDisabled(adFieldset, true);
 setDisabled(mapFilters, true);
 
-const getActiveForm = () => {
+const setActiveForm = () => {
   adForm.classList.remove(`ad-form--disabled`);
 };
 
-const getMapActive = () => {
+const setMapActive = () => {
   mapBooking.classList.remove(`map--faded`);
 };
 
-const getActivePage = () => {
-  getMapActive();
+const setActivePage = () => {
+  setMapActive();
   createPin();
   setDisabled(adFieldset, false);
   setDisabled(mapFilters, false);
-  getActiveForm();
+  setActiveForm();
+  validationOfTypeAndPrice();
 };
 
-mapPin.addEventListener(`mousedown`, (evt) => {
+const cardCloseMouse = (evt) => {
   if (evt.button === 0) {
-    getActivePage();
+    setActivePage();
     writeAddress(evt.x, evt.y);
+    mapPinMain.removeEventListener(`mousedown`, cardCloseMouse);
   }
-});
+};
 
-mapPin.addEventListener(`keydown`, (evt) => {
+mapPinMain.addEventListener(`mousedown`, cardCloseMouse);
+
+const cardCloseKeyboard = (evt) => {
   if (evt.key === `Enter`) {
-    getActivePage();
-    writeAddress(mapPin.offsetLeft, mapPin.offsetTop);
+    setActivePage();
+    writeAddress(mapPinMain.offsetLeft, mapPinMain.offsetTop);
+    mapPinMain.removeEventListener(`keydown`, cardCloseKeyboard);
   }
-});
+};
+
+mapPinMain.addEventListener(`keydown`, cardCloseKeyboard);
 
 const validationOfRoomsAndGuests = () => {
   let validationMessage = ``;
 
-  if (roomNumber.value < capacity.value || roomNumber.value === `100` && capacity.value !== `0`) {
+  if (roomInput.value < capacityInput.value || roomInput.value !== `100` && capacityInput.value === `0` || roomInput.value === `100` && capacityInput.value > `0`) {
     validationMessage = `Количество гостей, не должно привышать количество комнат, 100 комнат не для гостей`;
   }
 
-  roomNumber.setCustomValidity(validationMessage);
+  roomInput.setCustomValidity(validationMessage);
 };
 
-submit.addEventListener(`click`, () => {
+const setElementAttribute = (element, attribute, value) => {
+  element.setAttribute(attribute, value);
+};
+
+const validationOfTypeAndPrice = () => {
+  if (typeOfHousing.value === `bungalow`) {
+    setElementAttribute(pricePerNight, `placeholder`, 0);
+    setElementAttribute(pricePerNight, `min`, 0);
+  } else if (typeOfHousing.value === `flat`) {
+    setElementAttribute(pricePerNight, `placeholder`, 1000);
+    setElementAttribute(pricePerNight, `min`, 1000);
+  } else if (typeOfHousing.value === `house`) {
+    setElementAttribute(pricePerNight, `placeholder`, 5000);
+    setElementAttribute(pricePerNight, `min`, 5000);
+  } else if (typeOfHousing.value === `palace`) {
+    setElementAttribute(pricePerNight, `placeholder`, 10000);
+    setElementAttribute(pricePerNight, `min`, 10000);
+  }
+};
+
+typeOfHousing.addEventListener(`click`, () => {
+  validationOfTypeAndPrice();
+});
+
+const timeInInput = document.querySelector(`#timein`);
+const timeOutInput = document.querySelector(`#timeout`);
+
+const validationOfTime = (evt) => {
+  timeInInput.value = evt.target.value;
+  timeOutInput.value = evt.target.value;
+};
+
+timeInInput.addEventListener(`change`, validationOfTime);
+timeOutInput.addEventListener(`change`, validationOfTime);
+
+submitButton.addEventListener(`click`, () => {
   validationOfRoomsAndGuests();
+  validationOfTypeAndPrice();
 });
