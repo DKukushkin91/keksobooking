@@ -23,7 +23,7 @@ const FEATURES_OFFER = [
 ];
 
 const Price = {
-  MIN: 10000,
+  MIN: 1,
   MAX: 50000,
 };
 const Room = {
@@ -106,18 +106,26 @@ const getRenderPin = (pin) => {
 const fragmentPin = document.createDocumentFragment();
 const pins = getPins();
 
+
 for (let pin of pins) {
   const pinElement = getRenderPin(pin);
 
   pinElement.addEventListener(`click`, () => {
     const popupElement = getRenderCard(pin);
-    const closeMapCard = popupElement.querySelector(`.popup__close`);
-    mapBooking.insertBefore(popupElement, cardListElement);
-    const mapCard = document.querySelector(`.map__card`);
 
     const removeMapCard = () => {
+      const mapCard = document.querySelector(`.map__card`);
       mapCard.remove();
     };
+
+    if (document.querySelector(`.map__card`)) {
+      removeMapCard();
+      mapBooking.insertBefore(popupElement, cardListElement);
+    } else {
+      mapBooking.insertBefore(popupElement, cardListElement);
+    }
+
+    const closeMapCard = popupElement.querySelector(`.popup__close`);
 
     closeMapCard.addEventListener(`click`, () => {
       removeMapCard();
@@ -140,6 +148,7 @@ for (let pin of pins) {
   });
   fragmentPin.appendChild(pinElement);
 }
+
 
 const cardListElement = mapBooking.querySelector(`.map__filters-container`);
 const cardTemplate = document.querySelector(`#card`)
