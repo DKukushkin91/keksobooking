@@ -270,7 +270,7 @@ const setElementAttribute = (element, attribute, value) => {
   element.setAttribute(attribute, value);
 };
 
-const minPrice = {
+const MinPrice = {
   Bungalow: 0,
   Flat: 1000,
   House: 5000,
@@ -279,17 +279,17 @@ const minPrice = {
 
 const validationOfTypeAndPrice = () => {
   if (typeOfHousing.value === `bungalow`) {
-    setElementAttribute(pricePerNight, `placeholder`, minPrice.Bungalow);
-    setElementAttribute(pricePerNight, `min`, minPrice.Bungalow);
+    setElementAttribute(pricePerNight, `placeholder`, MinPrice.Bungalow);
+    setElementAttribute(pricePerNight, `min`, MinPrice.Bungalow);
   } else if (typeOfHousing.value === `flat`) {
-    setElementAttribute(pricePerNight, `placeholder`, minPrice.Flat);
-    setElementAttribute(pricePerNight, `min`, minPrice.Flat);
+    setElementAttribute(pricePerNight, `placeholder`, MinPrice.Flat);
+    setElementAttribute(pricePerNight, `min`, MinPrice.Flat);
   } else if (typeOfHousing.value === `house`) {
-    setElementAttribute(pricePerNight, `placeholder`, minPrice.House);
-    setElementAttribute(pricePerNight, `min`, minPrice.House);
+    setElementAttribute(pricePerNight, `placeholder`, MinPrice.House);
+    setElementAttribute(pricePerNight, `min`, MinPrice.House);
   } else if (typeOfHousing.value === `palace`) {
-    setElementAttribute(pricePerNight, `placeholder`, minPrice.Palace);
-    setElementAttribute(pricePerNight, `min`, minPrice.Palace);
+    setElementAttribute(pricePerNight, `placeholder`, MinPrice.Palace);
+    setElementAttribute(pricePerNight, `min`, MinPrice.Palace);
   }
 };
 
