@@ -117,12 +117,12 @@ for (let pin of pins) {
       }
     };
 
-    document.addEventListener(`keydown`, onPopupEscPress);
-
     const closePopup = () => {
       document.querySelector(`.map__card`).remove();
       document.removeEventListener(`keydown`, onPopupEscPress);
     };
+
+    document.addEventListener(`keydown`, onPopupEscPress);
 
     if (document.querySelector(`.map__card`)) {
       closePopup();
