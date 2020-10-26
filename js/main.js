@@ -106,49 +106,38 @@ const getRenderPin = (pin) => {
 const fragmentPin = document.createDocumentFragment();
 const pins = getPins();
 
-
 for (let pin of pins) {
   const pinElement = getRenderPin(pin);
 
   pinElement.addEventListener(`click`, () => {
     const popupElement = getRenderCard(pin);
+    const onPopupEscPress = (evt) => {
+      if (evt.key === `Escape`) {
+        closePopup();
+      }
+    };
 
-    const removeMapCard = () => {
-      const mapCard = document.querySelector(`.map__card`);
-      mapCard.remove();
+    document.addEventListener(`keydown`, onPopupEscPress);
+
+    const closePopup = () => {
+      document.querySelector(`.map__card`).remove();
+      document.removeEventListener(`keydown`, onPopupEscPress);
     };
 
     if (document.querySelector(`.map__card`)) {
-      removeMapCard();
-      mapBooking.insertBefore(popupElement, cardListElement);
-    } else {
-      mapBooking.insertBefore(popupElement, cardListElement);
+      closePopup();
     }
+    mapBooking.insertBefore(popupElement, cardListElement);
 
     const closeMapCard = popupElement.querySelector(`.popup__close`);
 
     closeMapCard.addEventListener(`click`, () => {
-      removeMapCard();
+      closePopup();
     });
 
-    const closePopupEsc = (evt) => {
-      if (evt.key === `Escape`) {
-        removeMapCard();
-        document.removeEventListener(`keydown`, closePopupEsc);
-      }
-    };
-
-    document.addEventListener(`keydown`, closePopupEsc);
-
-    closeMapCard.addEventListener(`keydown`, (evt) => {
-      if (evt.key === `Enter`) {
-        removeMapCard();
-      }
-    });
   });
   fragmentPin.appendChild(pinElement);
 }
-
 
 const cardListElement = mapBooking.querySelector(`.map__filters-container`);
 const cardTemplate = document.querySelector(`#card`)
@@ -242,30 +231,30 @@ const setActivePage = () => {
   setDisabled(adFieldset, false);
   setDisabled(mapFilters, false);
   setActiveForm();
-  validationOfTypeAndPrice();
+  onPriceValidation();
 };
 
-const cardCloseMouse = (evt) => {
+const onPinMainCloseMouse = (evt) => {
   if (evt.button === 0) {
     setActivePage();
     writeAddress(evt.x, evt.y);
-    mapPinMain.removeEventListener(`mousedown`, cardCloseMouse);
+    mapPinMain.removeEventListener(`mousedown`, onPinMainCloseMouse);
   }
 };
 
-mapPinMain.addEventListener(`mousedown`, cardCloseMouse);
+mapPinMain.addEventListener(`mousedown`, onPinMainCloseMouse);
 
-const cardCloseKeyboard = (evt) => {
+const onPinMainCloseKeyboard = (evt) => {
   if (evt.key === `Enter`) {
     setActivePage();
     writeAddress(mapPinMain.offsetLeft, mapPinMain.offsetTop);
-    mapPinMain.removeEventListener(`keydown`, cardCloseKeyboard);
+    mapPinMain.removeEventListener(`keydown`, onPinMainCloseKeyboard);
   }
 };
 
-mapPinMain.addEventListener(`keydown`, cardCloseKeyboard);
+mapPinMain.addEventListener(`keydown`, onPinMainCloseKeyboard);
 
-const validationOfRoomsAndGuests = () => {
+const onRoomsValidation = () => {
   let validationMessage = ``;
 
   if (roomInput.value < capacityInput.value || roomInput.value !== `100` && capacityInput.value === `0` || roomInput.value === `100` && capacityInput.value > `0`) {
@@ -286,38 +275,44 @@ const MinPrice = {
   Palace: 10000,
 };
 
-const validationOfTypeAndPrice = () => {
-  if (typeOfHousing.value === `bungalow`) {
-    setElementAttribute(pricePerNight, `placeholder`, MinPrice.Bungalow);
-    setElementAttribute(pricePerNight, `min`, MinPrice.Bungalow);
-  } else if (typeOfHousing.value === `flat`) {
-    setElementAttribute(pricePerNight, `placeholder`, MinPrice.Flat);
-    setElementAttribute(pricePerNight, `min`, MinPrice.Flat);
-  } else if (typeOfHousing.value === `house`) {
-    setElementAttribute(pricePerNight, `placeholder`, MinPrice.House);
-    setElementAttribute(pricePerNight, `min`, MinPrice.House);
-  } else if (typeOfHousing.value === `palace`) {
-    setElementAttribute(pricePerNight, `placeholder`, MinPrice.Palace);
-    setElementAttribute(pricePerNight, `min`, MinPrice.Palace);
+const onPriceValidation = () => {
+  let minPrice = 0;
+
+  switch (typeOfHousing.value) {
+    case `bungalow`:
+      minPrice = MinPrice.Bungalow;
+      break;
+    case `flat`:
+      minPrice = MinPrice.Flat;
+      break;
+    case `house`:
+      minPrice = MinPrice.House;
+      break;
+    case `palace`:
+      minPrice = MinPrice.Palace;
+      break;
   }
+
+  setElementAttribute(pricePerNight, `placeholder`, minPrice);
+  setElementAttribute(pricePerNight, `min`, minPrice);
 };
 
 typeOfHousing.addEventListener(`click`, () => {
-  validationOfTypeAndPrice();
+  onPriceValidation();
 });
 
 const timeInInput = document.querySelector(`#timein`);
 const timeOutInput = document.querySelector(`#timeout`);
 
-const validationOfTime = (evt) => {
+const onTimeValidation = (evt) => {
   timeInInput.value = evt.target.value;
   timeOutInput.value = evt.target.value;
 };
 
-timeInInput.addEventListener(`change`, validationOfTime);
-timeOutInput.addEventListener(`change`, validationOfTime);
+timeInInput.addEventListener(`change`, onTimeValidation);
+timeOutInput.addEventListener(`change`, onTimeValidation);
 
 submitButton.addEventListener(`click`, () => {
-  validationOfRoomsAndGuests();
-  validationOfTypeAndPrice();
+  onRoomsValidation();
+  onPriceValidation();
 });
