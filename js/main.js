@@ -23,7 +23,7 @@ const FEATURES_OFFER = [
 ];
 
 const Price = {
-  MIN: 10000,
+  MIN: 1,
   MAX: 50000,
 };
 const Room = {
@@ -107,10 +107,38 @@ const fragmentPin = document.createDocumentFragment();
 const pins = getPins();
 
 for (let pin of pins) {
-  fragmentPin.appendChild(getRenderPin(pin));
+  const pinElement = getRenderPin(pin);
+
+  pinElement.addEventListener(`click`, () => {
+    const popupElement = getRenderCard(pin);
+    const onPopupEscPress = (evt) => {
+      if (evt.key === `Escape`) {
+        closePopup();
+      }
+    };
+
+    const closePopup = () => {
+      document.querySelector(`.map__card`).remove();
+      document.removeEventListener(`keydown`, onPopupEscPress);
+    };
+
+    document.addEventListener(`keydown`, onPopupEscPress);
+
+    if (document.querySelector(`.map__card`)) {
+      closePopup();
+    }
+    mapBooking.insertBefore(popupElement, cardListElement);
+
+    const closeMapCard = popupElement.querySelector(`.popup__close`);
+
+    closeMapCard.addEventListener(`click`, () => {
+      closePopup();
+    });
+
+  });
+  fragmentPin.appendChild(pinElement);
 }
 
-/*
 const cardListElement = mapBooking.querySelector(`.map__filters-container`);
 const cardTemplate = document.querySelector(`#card`)
       .content
@@ -152,7 +180,6 @@ const getRenderCard = (card) => {
   const cardElement = cardTemplate.cloneNode(true);
   const photoElement = cardElement.querySelector(`.popup__photos`).querySelector(`.popup__photo`);
   cardElement.querySelector(`.popup__photos`).removeChild(photoElement);
-
   cardElement.querySelector(`.popup__title`).textContent = card.offer.title;
   cardElement.querySelector(`.popup__text--address`).textContent = card.offer.address;
   cardElement.querySelector(`.popup__text--price`).textContent = `${card.offer.price}₽/ночь`;
@@ -166,16 +193,16 @@ const getRenderCard = (card) => {
   return cardElement;
 };
 
-mapBooking.insertBefore(getRenderCard(pins[0]), cardListElement);*/
-
 const adForm = document.querySelector(`.ad-form`);
 const adFieldset = adForm.querySelectorAll(`fieldset`);
 const mapFilters = document.querySelector(`.map__filters`);
-const mapPin = document.querySelector(`.map__pin--main`);
+const mapPinMain = pinListElement.querySelector(`.map__pin--main`);
 const addressField = adForm.querySelector(`#address`);
 const roomInput = adForm.querySelector(`#room_number`);
 const capacityInput = adForm.querySelector(`#capacity`);
 const submitButton = adForm.querySelector(`.ad-form__submit`);
+const typeOfHousing = adForm.querySelector(`#type`);
+const pricePerNight = adForm.querySelector(`#price`);
 
 const writeAddress = (addressX, addressY) => {
   addressField.value = `${addressX}, ${addressY}`;
@@ -204,32 +231,88 @@ const setActivePage = () => {
   setDisabled(adFieldset, false);
   setDisabled(mapFilters, false);
   setActiveForm();
+  onPriceValidation();
 };
 
-mapPin.addEventListener(`mousedown`, (evt) => {
+const onPinMainCloseMouse = (evt) => {
   if (evt.button === 0) {
     setActivePage();
     writeAddress(evt.x, evt.y);
+    mapPinMain.removeEventListener(`mousedown`, onPinMainCloseMouse);
   }
-});
+};
 
-mapPin.addEventListener(`keydown`, (evt) => {
+mapPinMain.addEventListener(`mousedown`, onPinMainCloseMouse);
+
+const onPinMainCloseKeyboard = (evt) => {
   if (evt.key === `Enter`) {
     setActivePage();
-    writeAddress(mapPin.offsetLeft, mapPin.offsetTop);
+    writeAddress(mapPinMain.offsetLeft, mapPinMain.offsetTop);
+    mapPinMain.removeEventListener(`keydown`, onPinMainCloseKeyboard);
   }
-});
+};
 
-const validationOfRoomsAndGuests = () => {
+mapPinMain.addEventListener(`keydown`, onPinMainCloseKeyboard);
+
+const onRoomsValidation = () => {
   let validationMessage = ``;
 
-  if (roomInput.value < capacityInput.value || roomInput.value === `100` && capacityInput.value !== `0`) {
+  if (roomInput.value < capacityInput.value || roomInput.value !== `100` && capacityInput.value === `0` || roomInput.value === `100` && capacityInput.value > `0`) {
     validationMessage = `Количество гостей, не должно привышать количество комнат, 100 комнат не для гостей`;
   }
 
   roomInput.setCustomValidity(validationMessage);
 };
 
+const setElementAttribute = (element, attribute, value) => {
+  element.setAttribute(attribute, value);
+};
+
+const MinPrice = {
+  Bungalow: 0,
+  Flat: 1000,
+  House: 5000,
+  Palace: 10000,
+};
+
+const onPriceValidation = () => {
+  let minPrice = 0;
+
+  switch (typeOfHousing.value) {
+    case `bungalow`:
+      minPrice = MinPrice.Bungalow;
+      break;
+    case `flat`:
+      minPrice = MinPrice.Flat;
+      break;
+    case `house`:
+      minPrice = MinPrice.House;
+      break;
+    case `palace`:
+      minPrice = MinPrice.Palace;
+      break;
+  }
+
+  setElementAttribute(pricePerNight, `placeholder`, minPrice);
+  setElementAttribute(pricePerNight, `min`, minPrice);
+};
+
+typeOfHousing.addEventListener(`click`, () => {
+  onPriceValidation();
+});
+
+const timeInInput = document.querySelector(`#timein`);
+const timeOutInput = document.querySelector(`#timeout`);
+
+const onTimeValidation = (evt) => {
+  timeInInput.value = evt.target.value;
+  timeOutInput.value = evt.target.value;
+};
+
+timeInInput.addEventListener(`change`, onTimeValidation);
+timeOutInput.addEventListener(`change`, onTimeValidation);
+
 submitButton.addEventListener(`click`, () => {
-  validationOfRoomsAndGuests();
+  onRoomsValidation();
+  onPriceValidation();
 });
