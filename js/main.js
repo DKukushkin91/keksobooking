@@ -269,10 +269,10 @@ const setElementAttribute = (element, attribute, value) => {
 };
 
 const MinPrice = {
-  Bungalow: 0,
-  Flat: 1000,
-  House: 5000,
-  Palace: 10000,
+  BUNGALOW: 0,
+  FLAT: 1000,
+  HOUSE: 5000,
+  PALACE: 10000,
 };
 
 const onPriceValidation = () => {
@@ -280,16 +280,16 @@ const onPriceValidation = () => {
 
   switch (typeOfHousing.value) {
     case `bungalow`:
-      minPrice = MinPrice.Bungalow;
+      minPrice = MinPrice.BUNGALOW;
       break;
     case `flat`:
-      minPrice = MinPrice.Flat;
+      minPrice = MinPrice.FLAT;
       break;
     case `house`:
-      minPrice = MinPrice.House;
+      minPrice = MinPrice.HOUSE;
       break;
     case `palace`:
-      minPrice = MinPrice.Palace;
+      minPrice = MinPrice.PALACE;
       break;
   }
 
