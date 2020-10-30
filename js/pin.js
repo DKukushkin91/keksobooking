@@ -1,8 +1,7 @@
 'use strict';
 
 (() => {
-  const createPins = () => {
-
+  const onPinCreate = () => {
     const WIDTH_PIN = 40;
     const HEIGHT_PIN = 40;
     const MAX_PINS = 8;
@@ -49,15 +48,11 @@
       MAX: 630,
     };
 
-    window.pin = {
-      mapBooking: document.querySelector(`.map`),
-      pinListElement: window.pin.mapBooking.querySelector(`.map__pins`),
-      createPin: () => window.pin.pinListElement.appendChild(fragmentPin)
-    };
+    window.util.createElement(window.util.fragmentPin());
 
     const pinTemplate = document.querySelector(`#pin`)
-      .content
-      .querySelector(`.map__pin`);
+        .content
+        .querySelector(`.map__pin`);
 
     const getPins = () => {
       const pins = [];
@@ -104,16 +99,16 @@
       return pinElement;
     };
 
-    const fragmentPin = document.createDocumentFragment();
     const pins = getPins();
 
     for (let pin of pins) {
       const pinElement = getRenderPin(pin);
-      window.card.isPinEvent(pinElement, pin);
-      fragmentPin.appendChild(pinElement);
+      window.card.isCardEvent(pinElement, pin);
+      window.util.fragmentPin().appendChild(pinElement);
     }
   };
+
   window.pin = {
-    createPins
+    onPinCreate
   };
 })();
