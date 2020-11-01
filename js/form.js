@@ -1,9 +1,17 @@
 'use strict';
+(() =>{
+  const roomInput = document.querySelector(`#room_number`);
+  const capacityInput = document.querySelector(`#capacity`);
+  const typeOfHousing = document.querySelector(`#type`);
+  const pricePerNight = document.querySelector(`#price`);
 
-(() => {
+  const setActiveForm = () => {
+    document
+            .querySelector(`.ad-form`)
+            .classList.remove(`ad-form--disabled`);
+  };
+
   const onRoomsValidation = () => {
-    const roomInput = document.querySelector(`#room_number`);
-    const capacityInput = document.querySelector(`#capacity`);
     let validationMessage = ``;
 
     if (roomInput.value < capacityInput.value || roomInput.value !== `100` && capacityInput.value === `0` || roomInput.value === `100` && capacityInput.value > `0`) {
@@ -13,68 +21,56 @@
     roomInput.setCustomValidity(validationMessage);
   };
 
-  const priceValidation = () => {
-    const typeOfHousing = document.querySelector(`#type`);
-
-    const onPriceValidation = () => {
-      const pricePerNight = document.querySelector(`#price`);
-      const MinPrice = {
-        BUNGALOW: 0,
-        FLAT: 1000,
-        HOUSE: 5000,
-        PALACE: 10000,
-      };
-      let minPrice = 0;
-
-      switch (typeOfHousing.value) {
-        case `bungalow`:
-          minPrice = MinPrice.BUNGALOW;
-          break;
-        case `flat`:
-          minPrice = MinPrice.FLAT;
-          break;
-        case `house`:
-          minPrice = MinPrice.HOUSE;
-          break;
-        case `palace`:
-          minPrice = MinPrice.PALACE;
-          break;
-      }
-
-      window.util.setElementAttribute(pricePerNight, `placeholder`, minPrice);
-      window.util.setElementAttribute(pricePerNight, `min`, minPrice);
-    };
-
-    typeOfHousing.addEventListener(`click`, () => {
-      onPriceValidation();
-    });
+  const setElementAttribute = (element, attribute, value) => {
+    element.setAttribute(attribute, value);
   };
 
-  const timeValidation = () => {
-    const timeInInput = document.querySelector(`#timein`);
-    const timeOutInput = document.querySelector(`#timeout`);
+  const onPriceValidation = () => {
+    let minPrice = 0;
 
-    const onTimeValidation = (evt) => {
-      timeInInput.value = evt.target.value;
-      timeOutInput.value = evt.target.value;
-    };
+    switch (typeOfHousing.value) {
+      case `bungalow`:
+        minPrice = window.data.MinPrice.BUNGALOW;
+        break;
+      case `flat`:
+        minPrice = window.data.MinPrice.FLAT;
+        break;
+      case `house`:
+        minPrice = window.data.MinPrice.HOUSE;
+        break;
+      case `palace`:
+        minPrice = window.data.MinPrice.PALACE;
+        break;
+    }
 
-    timeInInput.addEventListener(`change`, onTimeValidation);
-    timeOutInput.addEventListener(`change`, onTimeValidation);
+    setElementAttribute(pricePerNight, `placeholder`, minPrice);
+    setElementAttribute(pricePerNight, `min`, minPrice);
   };
 
-  const onFormSubmit = () => {
-    const submitButton = document.querySelector(`.ad-form__submit`);
-    submitButton.addEventListener(`click`, () => {
-      onRoomsValidation();
-      priceValidation();
-    });
+  typeOfHousing.addEventListener(`click`, () => {
+    onPriceValidation();
+  });
+
+  const timeInInput = document.querySelector(`#timein`);
+  const timeOutInput = document.querySelector(`#timeout`);
+
+  const onTimeValidation = (evt) => {
+    timeInInput.value = evt.target.value;
+    timeOutInput.value = evt.target.value;
   };
+
+  timeInInput.addEventListener(`change`, onTimeValidation);
+  timeOutInput.addEventListener(`change`, onTimeValidation);
+
+  document
+          .querySelector(`.ad-form__submit`)
+          .addEventListener(`click`, () => {
+            onRoomsValidation();
+            onPriceValidation();
+          });
 
   window.form = {
-    onRoomsValidation,
-    priceValidation,
-    timeValidation,
-    onFormSubmit
+    setActiveForm,
+    onPriceValidation
   };
 })();
