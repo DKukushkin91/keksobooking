@@ -1,6 +1,5 @@
 'use strict';
 
-// data.js
 (() => {
   const WIDTH_PIN = 40;
   const HEIGHT_PIN = 40;
@@ -55,13 +54,6 @@
     PALACE: 10000,
   };
 
-  const fragmentPin = document.createDocumentFragment();
-  const mapBooking = document.querySelector(`.map`);
-  const pinListElement = document.querySelector(`.map__pins`);
-  const pinTemplate = document.querySelector(`#pin`)
-      .content
-      .querySelector(`.map__pin`);
-
   const offerType = {
     flat: `Квартира`,
     house: `Дом`,
@@ -86,10 +78,6 @@
     LocationX,
     LocationY,
     MinPrice,
-    fragmentPin,
-    mapBooking,
-    pinListElement,
-    pinTemplate,
     offerType
   };
 })();

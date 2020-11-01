@@ -24,7 +24,9 @@
       if (document.querySelector(`.map__card`)) {
         closePopup();
       }
-      window.data.mapBooking.insertBefore(popupElement, cardListElement);
+      document
+              .querySelector(`.map`)
+              .insertBefore(popupElement, cardListElement);
 
       const closeMapCard = popupElement.querySelector(`.popup__close`);
 

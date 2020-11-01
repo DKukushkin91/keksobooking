@@ -1,10 +1,12 @@
 'use strict';
 const mapPinMain = document.querySelector(`.map__pin--main`);
+const pinListElement = document.querySelector(`.map__pins`);
+const fragmentPin = document.createDocumentFragment();
 
 for (let pin of window.pins.pins) {
   const pinElement = window.pins.getRenderPin(pin);
   window.card.onPinOpenCard(pinElement, pin);
-  window.data.fragmentPin.appendChild(pinElement);
+  fragmentPin.appendChild(pinElement);
 }
 
 window.util.setDisabled(document
@@ -14,12 +16,14 @@ window.util.setDisabled(document
                                 .querySelector(`.map__filters`), true);
 
 const setMapActive = () => {
-  window.data.mapBooking.classList.remove(`map--faded`);
+  document
+          .querySelector(`.map`)
+          .classList.remove(`map--faded`);
 };
 
 const setActivePage = () => {
   setMapActive();
-  window.util.createPin(window.data.pinListElement, window.data.fragmentPin);
+  window.util.createPin(pinListElement, fragmentPin);
   window.util.setDisabled(document
                                   .querySelector(`.ad-form`)
                                   .querySelectorAll(`fieldset`), false);

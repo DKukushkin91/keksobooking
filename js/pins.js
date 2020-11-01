@@ -1,6 +1,10 @@
 'use strict';
 
 (() => {
+  const pinTemplate = document.querySelector(`#pin`)
+  .content
+  .querySelector(`.map__pin`);
+
   const getPins = () => {
     const pins = [];
     for (let i = 1; i <= window.data.MAX_PINS; i++) {
@@ -36,7 +40,7 @@
   };
 
   const getRenderPin = (pin) => {
-    const pinElement = window.data.pinTemplate.cloneNode(true);
+    const pinElement = pinTemplate.cloneNode(true);
     const pinElementSelector = pinElement.querySelector(`img`);
     pinElementSelector.src = pin.author.avatar;
     pinElementSelector.alt = pin.offer.title;
