@@ -1,5 +1,6 @@
 'use strict';
-(() =>{
+
+(() => {
   const roomInput = document.querySelector(`#room_number`);
   const capacityInput = document.querySelector(`#capacity`);
   const typeOfHousing = document.querySelector(`#type`);

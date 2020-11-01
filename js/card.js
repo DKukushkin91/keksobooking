@@ -1,4 +1,5 @@
 'use strict';
+
 (() => {
   const cardListElement = document.querySelector(`.map__filters-container`);
   const cardTemplate = document.querySelector(`#card`)
