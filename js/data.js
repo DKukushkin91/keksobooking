@@ -1,8 +1,6 @@
 'use strict';
 
 (() => {
-  const WIDTH_PIN = 40;
-  const HEIGHT_PIN = 40;
   const MAX_PINS = 8;
   const TITLE_OFFER = `Лучшее предложение!`;
   const TYPES_OFFER = [`palace`, `flat`, `house`, `bungalow`];
@@ -22,6 +20,21 @@
     `elevator`,
     `conditioner`,
   ];
+
+  const PinSize = {
+    WIDTH: 65,
+    HEIGHT: 65
+  };
+
+  const MapX = {
+    MIN: 0,
+    MAX: 1200
+  };
+
+  const MapY = {
+    MIN: 130,
+    MAX: 630
+  };
 
   const Price = {
     MIN: 1,
@@ -62,8 +75,7 @@
   };
 
   window.data = {
-    WIDTH_PIN,
-    HEIGHT_PIN,
+    PinSize,
     MAX_PINS,
     TITLE_OFFER,
     TYPES_OFFER,
@@ -78,6 +90,8 @@
     LocationX,
     LocationY,
     MinPrice,
-    offerType
+    offerType,
+    MapX,
+    MapY
   };
 })();
