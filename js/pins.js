@@ -5,6 +5,8 @@
   .content
   .querySelector(`.map__pin`);
 
+  const mapPinMain = document.querySelector(`.map__pin--main`);
+
   const getPins = () => {
     const pins = [];
     for (let i = 1; i <= window.data.MAX_PINS; i++) {
@@ -51,6 +53,26 @@
   };
 
   const pins = getPins();
+
+  const onPinMainCloseMouse = (evt) => {
+    if (evt.button === 0) {
+      window.main.setActivePage();
+      window.util.writeAddress(evt.x, evt.y);
+      mapPinMain.removeEventListener(`mousedown`, onPinMainCloseMouse);
+    }
+  };
+
+  mapPinMain.addEventListener(`mousedown`, onPinMainCloseMouse);
+
+  const onPinMainCloseKeyboard = (evt) => {
+    if (evt.key === `Enter`) {
+      window.main.setActivePage();
+      window.util.writeAddress(mapPinMain.offsetLeft, mapPinMain.offsetTop);
+      mapPinMain.removeEventListener(`keydown`, onPinMainCloseKeyboard);
+    }
+  };
+
+  mapPinMain.addEventListener(`keydown`, onPinMainCloseKeyboard);
 
   window.pins = {
     getRenderPin,

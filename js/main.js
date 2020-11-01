@@ -1,7 +1,6 @@
 'use strict';
 
 (() => {
-  const mapPinMain = document.querySelector(`.map__pin--main`);
   const pinListElement = document.querySelector(`.map__pins`);
   const fragmentPin = document.createDocumentFragment();
 
@@ -35,23 +34,7 @@
     window.form.onPriceValidation();
   };
 
-  const onPinMainCloseMouse = (evt) => {
-    if (evt.button === 0) {
-      setActivePage();
-      window.util.writeAddress(evt.x, evt.y);
-      mapPinMain.removeEventListener(`mousedown`, onPinMainCloseMouse);
-    }
+  window.main = {
+    setActivePage
   };
-
-  mapPinMain.addEventListener(`mousedown`, onPinMainCloseMouse);
-
-  const onPinMainCloseKeyboard = (evt) => {
-    if (evt.key === `Enter`) {
-      setActivePage();
-      window.util.writeAddress(mapPinMain.offsetLeft, mapPinMain.offsetTop);
-      mapPinMain.removeEventListener(`keydown`, onPinMainCloseKeyboard);
-    }
-  };
-
-  mapPinMain.addEventListener(`keydown`, onPinMainCloseKeyboard);
 })();
