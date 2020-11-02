@@ -95,6 +95,7 @@
 
     let onMouseMove = (moveEvt) => {
       moveEvt.preventDefault();
+      window.util.writeAddress(mapPinHandle.offsetLeft, mapPinHandle.offsetTop);
 
       let shift = {
         x: startCoords.x - moveEvt.clientX,
@@ -115,7 +116,6 @@
 
     let onMouseUp = (upEvt) => {
       upEvt.preventDefault();
-      window.util.writeAddress(evt.x, evt.y);
       document.removeEventListener(`mousemove`, onMouseMove);
       document.removeEventListener(`mouseup`, onMouseUp);
     };
