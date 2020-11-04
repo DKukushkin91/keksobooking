@@ -6,10 +6,6 @@
     OK: 200
   };
   const TIMEOUT_IN_MS = 10000;
-  // const errorTemplate = document.querySelector(`#error`)
-  // .content
-  // .querySelector(`.error`);
-  // const errorElement = errorTemplate.cloneNode(true);
 
   const showErrorElement = (text) => {
     const errorElement = document.createElement(`div`);
