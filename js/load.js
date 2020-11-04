@@ -59,4 +59,8 @@
     xhr.open(`GET`, URL);
     xhr.send();
   };
+
+  window.load = {
+    dataRetrivial,
+  };
 })();

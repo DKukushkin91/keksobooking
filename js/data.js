@@ -51,7 +51,6 @@
   };
 
   window.data = {
-    dataRetrivial,
     PinSize,
     Price,
     Room,
