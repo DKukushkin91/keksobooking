@@ -6,40 +6,6 @@
   .querySelector(`.map__pin`);
   const mapPinHandle = document.querySelector(`.map__pin--main`);
 
-  const getPins = () => {
-    const pins = [];
-    for (let i = 1; i <= window.data.MAX_PINS; i++) {
-      const avatarAuthor = `img/avatars/user0${i}.png`;
-      const location = {
-        x: window.util.getRandomNumbers(window.data.LocationX.MIN, window.data.LocationX.MAX),
-        y: window.util.getRandomNumbers(window.data.LocationY.MIN, window.data.LocationY.MAX)
-      };
-
-      pins.push({
-        author: {
-          avatar: avatarAuthor,
-        },
-
-        offer: {
-          title: window.data.TITLE_OFFER,
-          address: `${location.x}, ${location.y}`,
-          price: window.util.getRandomNumbers(window.data.Price.MIN, window.data.Price.MAX),
-          type: window.util.getRandomItem(window.data.TYPES_OFFER),
-          rooms: window.util.getRandomNumbers(window.data.Room.MIN, window.data.Room.MAX),
-          guests: window.util.getRandomNumbers(window.data.Guest.MIN, window.data.Guest.MAX),
-          checkin: window.util.getRandomItem(window.data.CHECKIN_OFFER),
-          checkout: window.util.getRandomItem(window.data.CHECKOUT_OFFER),
-          features: window.util.getRandom(window.data.FEATURES_OFFER),
-          description: window.data.DESCRIPTION_OFFER,
-          photos: window.util.getRandom(window.data.PHOTOS_OFFER)
-        },
-
-        location
-      });
-    }
-    return pins;
-  };
-
   const getRenderPin = (pin) => {
     const pinElement = pinTemplate.cloneNode(true);
     const pinElementSelector = pinElement.querySelector(`img`);
@@ -47,11 +13,8 @@
     pinElementSelector.alt = pin.offer.title;
     pinElement.style.left = `${pin.location.x - (window.data.PinSize.WIDTH / 2)}px`;
     pinElement.style.top = `${pin.location.y - window.data.PinSize.HEIGHT}px`;
-
     return pinElement;
   };
-
-  const pins = getPins();
 
   const onPinMainCloseMouse = (evt) => {
     if (evt.button === 0) {
@@ -93,7 +56,7 @@
       y: evt.clientY
     };
 
-    let onMouseMove = (moveEvt) => {
+    const onMouseMove = (moveEvt) => {
       moveEvt.preventDefault();
       window.util.writeAddress(mapPinHandle.offsetLeft, mapPinHandle.offsetTop);
 
@@ -114,7 +77,7 @@
       mapPinHandle.style.top = checkYPin(newY) + `px`;
     };
 
-    let onMouseUp = (upEvt) => {
+    const onMouseUp = (upEvt) => {
       upEvt.preventDefault();
       document.removeEventListener(`mousemove`, onMouseMove);
       document.removeEventListener(`mouseup`, onMouseUp);
@@ -138,6 +101,5 @@
 
   window.pins = {
     getRenderPin,
-    pins
   };
 })();

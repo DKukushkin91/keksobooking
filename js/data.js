@@ -1,25 +1,49 @@
 'use strict';
 
 (() => {
-  const MAX_PINS = 8;
-  const TITLE_OFFER = `Лучшее предложение!`;
-  const TYPES_OFFER = [`palace`, `flat`, `house`, `bungalow`];
-  const CHECKIN_OFFER = [`12.00`, `13.00`, `14.00`];
-  const CHECKOUT_OFFER = CHECKIN_OFFER;
-  const DESCRIPTION_OFFER = `Всё включено!`;
-  const PHOTOS_OFFER = [
-    `http://o0.github.io/assets/images/tokyo/hotel1.jpg`,
-    `http://o0.github.io/assets/images/tokyo/hotel2.jpg`,
-    `http://o0.github.io/assets/images/tokyo/hotel3.jpg`,
-  ];
-  const FEATURES_OFFER = [
-    `wifi`,
-    `dishwasher`,
-    `parking`,
-    `washer`,
-    `elevator`,
-    `conditioner`,
-  ];
+  const URL = `https://21.javascript.pages.academy/keksobooking/data`;
+  const StatusCode = {
+    OK: 200
+  };
+  const TIMEOUT_IN_MS = 10000;
+  const errorTemplate = document.querySelector(`#error`)
+  .content
+  .querySelector(`.error`);
+
+  const showErrorElement = (text) => {
+    const errorElement = errorTemplate.cloneNode(true);
+    errorElement
+                .querySelector(`.error__message`)
+                .textContent = text;
+    document
+            .querySelector(`.map`)
+            .append(errorElement);
+    return errorElement;
+  };
+
+  const dataRetrivial = (onSuccess, onError) => {
+    const xhr = new XMLHttpRequest();
+    xhr.responseType = `json`;
+
+    xhr.addEventListener(`load`, () => {
+      if (xhr.status === StatusCode.OK) {
+        onSuccess(xhr.response);
+      } else {
+        onError(showErrorElement(`Статус ответа: ${xhr.status} ${xhr.statusText}`));
+      }
+    });
+    xhr.addEventListener(`error`, () => {
+      onError(showErrorElement(`Произошла ошибка соединения`));
+    });
+    xhr.addEventListener(`timeout`, function () {
+      onError(showErrorElement(`Запрос не успел выполниться за ${xhr.timeout} мс`));
+    });
+
+    xhr.timeout = TIMEOUT_IN_MS;
+
+    xhr.open(`GET`, URL);
+    xhr.send();
+  };
 
   const PinSize = {
     WIDTH: 65,
@@ -75,15 +99,8 @@
   };
 
   window.data = {
+    dataRetrivial,
     PinSize,
-    MAX_PINS,
-    TITLE_OFFER,
-    TYPES_OFFER,
-    CHECKIN_OFFER,
-    CHECKOUT_OFFER,
-    DESCRIPTION_OFFER,
-    PHOTOS_OFFER,
-    FEATURES_OFFER,
     Price,
     Room,
     Guest,

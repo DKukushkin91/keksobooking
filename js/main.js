@@ -3,12 +3,13 @@
 (() => {
   const pinListElement = document.querySelector(`.map__pins`);
   const fragmentPin = document.createDocumentFragment();
-
-  for (let pin of window.pins.pins) {
-    const pinElement = window.pins.getRenderPin(pin);
-    window.card.onPinOpenCard(pinElement, pin);
-    fragmentPin.appendChild(pinElement);
-  }
+  window.data.dataRetrivial((data) => {
+    for (let pin of data) {
+      const pinElement = window.pins.getRenderPin(pin);
+      window.card.onPinOpenCard(pinElement, pin);
+      fragmentPin.appendChild(pinElement);
+    }
+  });
 
   window.util.setDisabled(document
                                 .querySelector(`.ad-form`)
