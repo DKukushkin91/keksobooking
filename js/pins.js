@@ -101,5 +101,6 @@
 
   window.pins = {
     getRenderPin,
+    onPinMainCloseMouse
   };
 })();

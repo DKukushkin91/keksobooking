@@ -5,11 +5,10 @@
   const capacityInput = document.querySelector(`#capacity`);
   const typeOfHousing = document.querySelector(`#type`);
   const pricePerNight = document.querySelector(`#price`);
+  const pageForm = document.querySelector(`.ad-form`);
 
   const setActiveForm = () => {
-    document
-            .querySelector(`.ad-form`)
-            .classList.remove(`ad-form--disabled`);
+    pageForm.classList.remove(`ad-form--disabled`);
   };
 
   const onRoomsValidation = () => {
@@ -63,12 +62,52 @@
   timeInInput.addEventListener(`change`, onTimeValidation);
   timeOutInput.addEventListener(`change`, onTimeValidation);
 
-  document
+  const onFormSubmit = () => {
+    document
           .querySelector(`.ad-form__submit`)
           .addEventListener(`click`, () => {
             onRoomsValidation();
             onPriceValidation();
           });
+  };
+  onFormSubmit();
+
+  const onFormReset = () => {
+    document
+          .querySelector(`.ad-form__reset`)
+          .removeEventListener(`click`, onFormReset);
+
+    document.querySelector(`.ad-form`).reset();
+    pageForm.classList.add(`ad-form--disabled`);
+    window.util.setDisabled(document
+                                    .querySelector(`.ad-form`)
+                                    .querySelectorAll(`fieldset`), true);
+    window.util.setDisabled(document
+                                    .querySelector(`.map__filters`), true);
+    document
+            .querySelector(`.map`)
+            .classList.add(`map--faded`);
+    const pinsElements = document
+                                .querySelector(`.map__pins`)
+                                .querySelectorAll(`[type="button"]`);
+    for (let i = 0; i < pinsElements.length; i++) {
+      document
+              .querySelector(`.map__pins`)
+              .removeChild(pinsElements[i]);
+    }
+  };
+
+  document
+          .querySelector(`.ad-form__reset`)
+          .addEventListener(`click`, onFormReset);
+
+  pageForm.addEventListener(`submit`, (evt) => {
+    window.upload.clientUpload(new FormData(pageForm), () => {
+      window.util.setDisabled(
+          pageForm.querySelectorAll(`fieldset`), true);
+    });
+    evt.preventDefault();
+  });
 
   window.form = {
     setActiveForm,

@@ -58,5 +58,7 @@
 
   window.load = {
     dataRetrivial,
+    StatusCode,
+    TIMEOUT_IN_MS
   };
 })();
