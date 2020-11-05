@@ -1,25 +1,6 @@
 'use strict';
 
 (() => {
-  const MAX_PINS = 8;
-  const TITLE_OFFER = `Лучшее предложение!`;
-  const TYPES_OFFER = [`palace`, `flat`, `house`, `bungalow`];
-  const CHECKIN_OFFER = [`12.00`, `13.00`, `14.00`];
-  const CHECKOUT_OFFER = CHECKIN_OFFER;
-  const DESCRIPTION_OFFER = `Всё включено!`;
-  const PHOTOS_OFFER = [
-    `http://o0.github.io/assets/images/tokyo/hotel1.jpg`,
-    `http://o0.github.io/assets/images/tokyo/hotel2.jpg`,
-    `http://o0.github.io/assets/images/tokyo/hotel3.jpg`,
-  ];
-  const FEATURES_OFFER = [
-    `wifi`,
-    `dishwasher`,
-    `parking`,
-    `washer`,
-    `elevator`,
-    `conditioner`,
-  ];
 
   const PinSize = {
     WIDTH: 65,
@@ -43,11 +24,6 @@
   const Room = {
     MIN: 1,
     MAX: 3,
-  };
-
-  const Guest = {
-    MIN: 1,
-    MAX: 2,
   };
 
   const LocationX = {
@@ -76,17 +52,8 @@
 
   window.data = {
     PinSize,
-    MAX_PINS,
-    TITLE_OFFER,
-    TYPES_OFFER,
-    CHECKIN_OFFER,
-    CHECKOUT_OFFER,
-    DESCRIPTION_OFFER,
-    PHOTOS_OFFER,
-    FEATURES_OFFER,
     Price,
     Room,
-    Guest,
     LocationX,
     LocationY,
     MinPrice,
