@@ -80,7 +80,7 @@
   };
 
   window.card = {
-    onPinOpenCard
+    onPinOpenCard,
   };
 
 })();

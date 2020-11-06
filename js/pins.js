@@ -2,8 +2,8 @@
 
 (() => {
   const pinTemplate = document.querySelector(`#pin`)
-  .content
-  .querySelector(`.map__pin`);
+                              .content
+                              .querySelector(`.map__pin`);
   const mapPinHandle = document.querySelector(`.map__pin--main`);
 
   const getRenderPin = (pin) => {
@@ -20,7 +20,10 @@
     if (evt.button === 0) {
       window.main.setActivePage();
       window.util.writeAddress(evt.x, evt.y);
+      mapPinHandle.classList.add(`active`);
+    } else if (mapPinHandle.classList.contains(`active`)) {
       mapPinHandle.removeEventListener(`mousedown`, onPinMainCloseMouse);
+      mapPinHandle.classList.remove(`active`);
     }
   };
 

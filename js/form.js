@@ -6,6 +6,7 @@
   const typeOfHousing = document.querySelector(`#type`);
   const pricePerNight = document.querySelector(`#price`);
   const pageForm = document.querySelector(`.ad-form`);
+  const formResetButton = pageForm.querySelector(`.ad-form__reset`);
 
   const setActiveForm = () => {
     pageForm.classList.remove(`ad-form--disabled`);
@@ -62,49 +63,40 @@
   timeInInput.addEventListener(`change`, onTimeValidation);
   timeOutInput.addEventListener(`change`, onTimeValidation);
 
-  const onFormSubmit = () => {
-    document
-          .querySelector(`.ad-form__submit`)
-          .addEventListener(`click`, () => {
-            onRoomsValidation();
-            onPriceValidation();
-          });
-  };
-  onFormSubmit();
-
-  const onFormReset = () => {
-    document
-          .querySelector(`.ad-form__reset`)
-          .removeEventListener(`click`, onFormReset);
-
-    document.querySelector(`.ad-form`).reset();
+  const onFormReset = (evt) => {
+    evt.preventDefault();
+    formResetButton.removeEventListener(`click`, onFormReset);
+    pageForm.reset();
     pageForm.classList.add(`ad-form--disabled`);
-    window.util.setDisabled(document
-                                    .querySelector(`.ad-form`)
-                                    .querySelectorAll(`fieldset`), true);
+    window.util.setDisabled(pageForm.querySelectorAll(`fieldset`), true);
     window.util.setDisabled(document
                                     .querySelector(`.map__filters`), true);
     document
             .querySelector(`.map`)
             .classList.add(`map--faded`);
+
     const pinsElements = document
                                 .querySelector(`.map__pins`)
                                 .querySelectorAll(`[type="button"]`);
+
     for (let i = 0; i < pinsElements.length; i++) {
       document
               .querySelector(`.map__pins`)
               .removeChild(pinsElements[i]);
     }
+    if (document.querySelector(`.map__card`)) {
+      document.querySelector(`.map__card`).remove();
+    }
   };
 
-  document
-          .querySelector(`.ad-form__reset`)
-          .addEventListener(`click`, onFormReset);
+  formResetButton.addEventListener(`click`, onFormReset);
 
   pageForm.addEventListener(`submit`, (evt) => {
     window.upload.clientUpload(new FormData(pageForm), () => {
       window.util.setDisabled(
           pageForm.querySelectorAll(`fieldset`), true);
+      onRoomsValidation();
+      onPriceValidation();
     });
     evt.preventDefault();
   });

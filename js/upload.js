@@ -5,7 +5,7 @@
   const errorTemplate = document.querySelector(`#error`)
                                 .content;
   const successTemplate = document.querySelector(`#success`)
-                                .content;
+                                  .content;
   const hideError = () => {
     document
             .querySelector(`main`)
