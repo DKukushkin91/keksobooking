@@ -10,7 +10,11 @@
   const PinSize = {
     WIDTH: 65,
     HEIGHT: 65,
-    TAIL: 22
+  };
+
+  const TailSize = {
+    WIDTH: 10,
+    HEIGHT: 22
   };
 
   const MapX = {
@@ -66,6 +70,7 @@
     offerType,
     MapX,
     MapY,
-    PinStart
+    PinStart,
+    TailSize
   };
 })();

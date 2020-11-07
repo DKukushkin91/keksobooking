@@ -26,6 +26,9 @@
   const restartPage = () => {
     document.querySelector(`.ad-form`)
             .reset();
+    document
+            .querySelector(`.map__filters`)
+            .reset();
     document.querySelector(`.ad-form`)
                     .classList.add(`ad-form--disabled`);
 
@@ -50,6 +53,7 @@
             .addEventListener(`mousedown`, window.pins.onPinMainActive);
     window.util.onPinStart();
     window.pins.pinCoordinate();
+
   };
 
   window.util = {
