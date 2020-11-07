@@ -5,6 +5,10 @@
                               .content
                               .querySelector(`.map__pin`);
   const mapPinHandle = document.querySelector(`.map__pin--main`);
+  const pinCoordinate = () => {
+    window.util.writeAddress(mapPinHandle.offsetLeft, mapPinHandle.offsetTop);
+  };
+  pinCoordinate();
 
   const getRenderPin = (pin) => {
     const pinElement = pinTemplate.cloneNode(true);
@@ -16,14 +20,11 @@
     return pinElement;
   };
 
-  const onPinMainCloseMouse = (evt) => {
+  const onPinMainActive = (evt) => {
     if (evt.button === 0) {
       window.main.setActivePage();
       window.util.writeAddress(evt.x, evt.y);
-      mapPinHandle.classList.add(`active`);
-    } else if (mapPinHandle.classList.contains(`active`)) {
-      mapPinHandle.removeEventListener(`mousedown`, onPinMainCloseMouse);
-      mapPinHandle.classList.remove(`active`);
+      mapPinHandle.removeEventListener(`mousedown`, onPinMainActive);
     }
   };
 
@@ -61,7 +62,7 @@
 
     const onMouseMove = (moveEvt) => {
       moveEvt.preventDefault();
-      window.util.writeAddress(mapPinHandle.offsetLeft, mapPinHandle.offsetTop);
+      pinCoordinate();
 
       let shift = {
         x: startCoords.x - moveEvt.clientX,
@@ -90,20 +91,21 @@
     document.addEventListener(`mouseup`, onMouseUp);
   });
 
-  mapPinHandle.addEventListener(`mousedown`, onPinMainCloseMouse);
+  mapPinHandle.addEventListener(`mousedown`, onPinMainActive);
 
-  const onPinMainCloseKeyboard = (evt) => {
+  const onPinMainEvent = (evt) => {
     if (evt.key === `Enter`) {
       window.main.setActivePage();
       window.util.writeAddress(mapPinHandle.offsetLeft, mapPinHandle.offsetTop);
-      mapPinHandle.removeEventListener(`keydown`, onPinMainCloseKeyboard);
+      mapPinHandle.removeEventListener(`keydown`, onPinMainEvent);
     }
   };
 
-  mapPinHandle.addEventListener(`keydown`, onPinMainCloseKeyboard);
+  mapPinHandle.addEventListener(`keydown`, onPinMainEvent);
 
   window.pins = {
     getRenderPin,
-    onPinMainCloseMouse
+    onPinMainActive,
+    pinCoordinate
   };
 })();

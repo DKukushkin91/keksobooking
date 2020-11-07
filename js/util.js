@@ -16,12 +16,50 @@
     }
   };
 
+  const onPinStart = () => {
+    document.querySelector(`.map__pin--main`)
+            .style.top = window.data.PinStart.Y;
+    document.querySelector(`.map__pin--main`)
+            .style.left = window.data.PinStart.X;
+  };
+
+  const restartPage = () => {
+    document.querySelector(`.ad-form`)
+            .reset();
+    document.querySelector(`.ad-form`)
+                    .classList.add(`ad-form--disabled`);
+
+    document
+          .querySelector(`.map`)
+          .classList.add(`map--faded`);
+
+    document
+          .querySelectorAll(`.map__pins [type="button"]`)
+          .forEach((button) => button.remove());
+
+    window.util.setDisabled(document
+            .querySelector(`.ad-form`)
+            .querySelectorAll(`fieldset`), true);
+    window.util.setDisabled(document
+            .querySelector(`.map__filters`), true);
+
+    if (document.querySelector(`.map__card`)) {
+      document.querySelector(`.map__card`).remove();
+    }
+    document.querySelector(`.map__pin--main`)
+            .addEventListener(`mousedown`, window.pins.onPinMainActive);
+    window.util.onPinStart();
+    window.pins.pinCoordinate();
+  };
+
   window.util = {
     getRandomNumbers,
     getRandomItem,
     getRandom,
     createPin,
     writeAddress,
-    setDisabled
+    setDisabled,
+    onPinStart,
+    restartPage
   };
 })();

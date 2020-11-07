@@ -2,6 +2,11 @@
 
 (() => {
 
+  const PinStart = {
+    X: `${570}px`,
+    Y: `${375}px`
+  };
+
   const PinSize = {
     WIDTH: 65,
     HEIGHT: 65
@@ -59,6 +64,7 @@
     MinPrice,
     offerType,
     MapX,
-    MapY
+    MapY,
+    PinStart
   };
 })();

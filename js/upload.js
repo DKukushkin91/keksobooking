@@ -1,26 +1,23 @@
 'use strict';
 
 (() => {
+  const mainBlock = document.querySelector(`main`);
   const URL = `https://21.javascript.pages.academy/keksobooking`;
   const errorTemplate = document.querySelector(`#error`)
                                 .content;
   const successTemplate = document.querySelector(`#success`)
                                   .content;
   const hideError = () => {
-    document
-            .querySelector(`main`)
-            .querySelector(`.error`).remove();
+    mainBlock.querySelector(`.error`).remove();
   };
 
   const hideSuccess = () => {
-    document
-            .querySelector(`main`)
-            .querySelector(`.success`).remove();
+    mainBlock.querySelector(`.success`).remove();
   };
 
   const showError = () => {
     const errorElement = errorTemplate.cloneNode(true);
-    document.querySelector(`main`).append(errorElement);
+    mainBlock.append(errorElement);
     document.addEventListener(`click`, hideError);
     document.addEventListener(`keydown`, (evt) => {
       if (evt.key === `Escape`) {
@@ -31,7 +28,7 @@
 
   const showSuccess = () => {
     const successElement = successTemplate.cloneNode(true);
-    document.querySelector(`main`).append(successElement);
+    mainBlock.append(successElement);
     document.addEventListener(`click`, hideSuccess);
     document.addEventListener(`keydown`, (evt) => {
       if (evt.key === `Escape`) {
@@ -47,6 +44,7 @@
     xhr.addEventListener(`load`, () => {
       if (xhr.status === window.load.StatusCode.OK) {
         onSuccess(xhr.response);
+        window.util.restartPage();
         showSuccess();
       } else {
         showError();

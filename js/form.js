@@ -63,38 +63,17 @@
   timeInInput.addEventListener(`change`, onTimeValidation);
   timeOutInput.addEventListener(`change`, onTimeValidation);
 
-  const onFormReset = (evt) => {
-    evt.preventDefault();
-    formResetButton.removeEventListener(`click`, onFormReset);
-    pageForm.reset();
-    pageForm.classList.add(`ad-form--disabled`);
-    window.util.setDisabled(pageForm.querySelectorAll(`fieldset`), true);
-    window.util.setDisabled(document
-                                    .querySelector(`.map__filters`), true);
-    document
-            .querySelector(`.map`)
-            .classList.add(`map--faded`);
-
-    const pinsElements = document
-                                .querySelector(`.map__pins`)
-                                .querySelectorAll(`[type="button"]`);
-
-    for (let i = 0; i < pinsElements.length; i++) {
-      document
-              .querySelector(`.map__pins`)
-              .removeChild(pinsElements[i]);
-    }
-    if (document.querySelector(`.map__card`)) {
-      document.querySelector(`.map__card`).remove();
-    }
+  const onFormRestart = () => {
+    const onFormReset = (evt) => {
+      evt.preventDefault();
+      formResetButton.removeEventListener(`click`, onFormReset);
+      window.util.restartPage();
+    };
+    formResetButton.addEventListener(`click`, onFormReset);
   };
-
-  formResetButton.addEventListener(`click`, onFormReset);
 
   pageForm.addEventListener(`submit`, (evt) => {
     window.upload.clientUpload(new FormData(pageForm), () => {
-      window.util.setDisabled(
-          pageForm.querySelectorAll(`fieldset`), true);
       onRoomsValidation();
       onPriceValidation();
     });
@@ -103,6 +82,7 @@
 
   window.form = {
     setActiveForm,
-    onPriceValidation
+    onPriceValidation,
+    onFormRestart
   };
 })();
