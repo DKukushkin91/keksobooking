@@ -15,8 +15,8 @@
     const pinElementSelector = pinElement.querySelector(`img`);
     pinElementSelector.src = pin.author.avatar;
     pinElementSelector.alt = pin.offer.title;
-    pinElement.style.left = `${pin.location.x - (window.data.PinSize.WIDTH / 2 - window.data.PinSize.TAIL)}px`;
-    pinElement.style.top = `${pin.location.y - window.data.PinSize.HEIGHT - window.data.PinSize.TAIL}px`;
+    pinElement.style.left = `${pin.location.x - window.data.PinSize.WIDTH}px`;
+    pinElement.style.top = `${pin.location.y - window.data.PinSize.HEIGHT}px`;
     return pinElement;
   };
 
