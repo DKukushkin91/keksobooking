@@ -7,12 +7,17 @@
                                 .content;
   const successTemplate = document.querySelector(`#success`)
                                   .content;
+
   const hideError = () => {
-    mainBlock.querySelector(`.error`).remove();
+    if (mainBlock.querySelector(`.error`)) {
+      mainBlock.querySelector(`.error`).remove();
+    }
   };
 
   const hideSuccess = () => {
-    mainBlock.querySelector(`.success`).remove();
+    if (mainBlock.querySelector(`.success`)) {
+      mainBlock.querySelector(`.success`).remove();
+    }
   };
 
   const showError = () => {
