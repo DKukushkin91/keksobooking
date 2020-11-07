@@ -15,8 +15,8 @@
     const pinElementSelector = pinElement.querySelector(`img`);
     pinElementSelector.src = pin.author.avatar;
     pinElementSelector.alt = pin.offer.title;
-    pinElement.style.left = `${pin.location.x - (window.data.PinSize.WIDTH / 2)}px`;
-    pinElement.style.top = `${pin.location.y - window.data.PinSize.HEIGHT}px`;
+    pinElement.style.left = `${pin.location.x - (window.data.PinSize.WIDTH / 2 - window.data.PinSize.TAIL)}px`;
+    pinElement.style.top = `${pin.location.y - window.data.PinSize.HEIGHT - window.data.PinSize.TAIL}px`;
     return pinElement;
   };
 
@@ -77,8 +77,8 @@
       const newX = mapPinHandle.offsetLeft - shift.x;
       const newY = mapPinHandle.offsetTop - shift.y;
 
-      mapPinHandle.style.left = checkXPin(newX) + `px`;
-      mapPinHandle.style.top = checkYPin(newY) + `px`;
+      mapPinHandle.style.left = `${checkXPin(newX)}px`;
+      mapPinHandle.style.top = `${checkYPin(newY)}px`;
     };
 
     const onMouseUp = (upEvt) => {

@@ -9,7 +9,8 @@
 
   const PinSize = {
     WIDTH: 65,
-    HEIGHT: 65
+    HEIGHT: 65,
+    TAIL: 22
   };
 
   const MapX = {
