@@ -23,7 +23,7 @@
   const onPinMainActive = (evt) => {
     if (evt.button === 0) {
       window.main.setActivePage();
-      window.util.writeAddress(evt.x, evt.y);
+      window.util.onPinStart();
       mapPinHandle.removeEventListener(`mousedown`, onPinMainActive);
     }
   };
