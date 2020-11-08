@@ -5,11 +5,11 @@
   const capacityInput = document.querySelector(`#capacity`);
   const typeOfHousing = document.querySelector(`#type`);
   const pricePerNight = document.querySelector(`#price`);
+  const pageForm = document.querySelector(`.ad-form`);
+  const formResetButton = pageForm.querySelector(`.ad-form__reset`);
 
   const setActiveForm = () => {
-    document
-            .querySelector(`.ad-form`)
-            .classList.remove(`ad-form--disabled`);
+    pageForm.classList.remove(`ad-form--disabled`);
   };
 
   const onRoomsValidation = () => {
@@ -63,15 +63,26 @@
   timeInInput.addEventListener(`change`, onTimeValidation);
   timeOutInput.addEventListener(`change`, onTimeValidation);
 
-  document
-          .querySelector(`.ad-form__submit`)
-          .addEventListener(`click`, () => {
-            onRoomsValidation();
-            onPriceValidation();
-          });
+  const onFormRestart = () => {
+    const onFormReset = (evt) => {
+      evt.preventDefault();
+      formResetButton.removeEventListener(`click`, onFormReset);
+      window.util.restartPage();
+    };
+    formResetButton.addEventListener(`click`, onFormReset);
+  };
+
+  pageForm.addEventListener(`submit`, (evt) => {
+    window.upload.clientUpload(new FormData(pageForm), () => {
+      onRoomsValidation();
+      onPriceValidation();
+    });
+    evt.preventDefault();
+  });
 
   window.form = {
     setActiveForm,
-    onPriceValidation
+    onPriceValidation,
+    onFormRestart
   };
 })();

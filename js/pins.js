@@ -2,25 +2,29 @@
 
 (() => {
   const pinTemplate = document.querySelector(`#pin`)
-  .content
-  .querySelector(`.map__pin`);
+                              .content
+                              .querySelector(`.map__pin`);
   const mapPinHandle = document.querySelector(`.map__pin--main`);
+  const pinCoordinate = () => {
+    window.util.writeAddress(mapPinHandle.offsetLeft, mapPinHandle.offsetTop);
+  };
+  pinCoordinate();
 
   const getRenderPin = (pin) => {
     const pinElement = pinTemplate.cloneNode(true);
     const pinElementSelector = pinElement.querySelector(`img`);
     pinElementSelector.src = pin.author.avatar;
     pinElementSelector.alt = pin.offer.title;
-    pinElement.style.left = `${pin.location.x - (window.data.PinSize.WIDTH / 2)}px`;
+    pinElement.style.left = `${pin.location.x - window.data.PinSize.WIDTH}px`;
     pinElement.style.top = `${pin.location.y - window.data.PinSize.HEIGHT}px`;
     return pinElement;
   };
 
-  const onPinMainCloseMouse = (evt) => {
+  const onPinMainActive = (evt) => {
     if (evt.button === 0) {
       window.main.setActivePage();
-      window.util.writeAddress(evt.x, evt.y);
-      mapPinHandle.removeEventListener(`mousedown`, onPinMainCloseMouse);
+      window.util.onPinStart();
+      mapPinHandle.removeEventListener(`mousedown`, onPinMainActive);
     }
   };
 
@@ -58,7 +62,7 @@
 
     const onMouseMove = (moveEvt) => {
       moveEvt.preventDefault();
-      window.util.writeAddress(mapPinHandle.offsetLeft, mapPinHandle.offsetTop);
+      pinCoordinate();
 
       let shift = {
         x: startCoords.x - moveEvt.clientX,
@@ -73,8 +77,8 @@
       const newX = mapPinHandle.offsetLeft - shift.x;
       const newY = mapPinHandle.offsetTop - shift.y;
 
-      mapPinHandle.style.left = checkXPin(newX) + `px`;
-      mapPinHandle.style.top = checkYPin(newY) + `px`;
+      mapPinHandle.style.left = `${checkXPin(newX)}px`;
+      mapPinHandle.style.top = `${checkYPin(newY)}px`;
     };
 
     const onMouseUp = (upEvt) => {
@@ -87,19 +91,21 @@
     document.addEventListener(`mouseup`, onMouseUp);
   });
 
-  mapPinHandle.addEventListener(`mousedown`, onPinMainCloseMouse);
+  mapPinHandle.addEventListener(`mousedown`, onPinMainActive);
 
-  const onPinMainCloseKeyboard = (evt) => {
+  const onPinMainEvent = (evt) => {
     if (evt.key === `Enter`) {
       window.main.setActivePage();
       window.util.writeAddress(mapPinHandle.offsetLeft, mapPinHandle.offsetTop);
-      mapPinHandle.removeEventListener(`keydown`, onPinMainCloseKeyboard);
+      mapPinHandle.removeEventListener(`keydown`, onPinMainEvent);
     }
   };
 
-  mapPinHandle.addEventListener(`keydown`, onPinMainCloseKeyboard);
+  mapPinHandle.addEventListener(`keydown`, onPinMainEvent);
 
   window.pins = {
     getRenderPin,
+    onPinMainActive,
+    pinCoordinate
   };
 })();

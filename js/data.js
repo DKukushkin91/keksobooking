@@ -2,9 +2,19 @@
 
 (() => {
 
+  const PinStart = {
+    X: `${570}px`,
+    Y: `${375}px`
+  };
+
   const PinSize = {
     WIDTH: 65,
-    HEIGHT: 65
+    HEIGHT: 65,
+  };
+
+  const TailSize = {
+    WIDTH: 10,
+    HEIGHT: 22
   };
 
   const MapX = {
@@ -59,6 +69,8 @@
     MinPrice,
     offerType,
     MapX,
-    MapY
+    MapY,
+    PinStart,
+    TailSize
   };
 })();
