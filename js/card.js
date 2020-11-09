@@ -16,8 +16,10 @@
       };
 
       const closePopup = () => {
-        document.querySelector(`.map__card`).remove();
-        document.removeEventListener(`keydown`, onPopupEscPress);
+        if (document.querySelector(`.map__card`)) {
+          document.querySelector(`.map__card`).remove();
+          document.removeEventListener(`keydown`, onPopupEscPress);
+        }
       };
 
       document.addEventListener(`keydown`, onPopupEscPress);

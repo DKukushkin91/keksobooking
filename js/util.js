@@ -23,32 +23,34 @@
             .style.left = window.data.PinStart.X;
   };
 
-  const restartPage = () => {
-    document.querySelector(`.ad-form`)
-            .reset();
-    document
-            .querySelector(`.map__filters`)
-            .reset();
-    document.querySelector(`.ad-form`)
-                    .classList.add(`ad-form--disabled`);
+  const onPinsRemove = () => {
+    document.querySelectorAll(`.map__pins [type="button"]`)
+            .forEach((button) => button.remove());
+  };
 
-    document
-          .querySelector(`.map`)
-          .classList.add(`map--faded`);
-
-    document
-          .querySelectorAll(`.map__pins [type="button"]`)
-          .forEach((button) => button.remove());
-
-    window.util.setDisabled(document
-            .querySelector(`.ad-form`)
-            .querySelectorAll(`fieldset`), true);
-    window.util.setDisabled(document
-            .querySelector(`.map__filters`), true);
-
+  const onCardRemove = () => {
     if (document.querySelector(`.map__card`)) {
       document.querySelector(`.map__card`).remove();
     }
+  };
+
+  const restartPage = () => {
+    document.querySelector(`.ad-form`)
+            .reset();
+    document.querySelector(`.map__filters`)
+            .reset();
+
+    document.querySelector(`.ad-form`)
+            .classList.add(`ad-form--disabled`);
+    document.querySelector(`.map`)
+            .classList.add(`map--faded`);
+    onPinsRemove();
+    window.util.setDisabled(
+        document.querySelector(`.ad-form`)
+                .querySelectorAll(`fieldset`), true);
+    window.util.setDisabled(
+        document.querySelector(`.map__filters`), true);
+    onCardRemove();
     document.querySelector(`.map__pin--main`)
             .addEventListener(`mousedown`, window.pins.onPinMainActive);
     window.util.onPinStart();
@@ -64,6 +66,8 @@
     writeAddress,
     setDisabled,
     onPinStart,
-    restartPage
+    restartPage,
+    onCardRemove,
+    onPinsRemove
   };
 })();
