@@ -9,6 +9,8 @@
   const onPinOpenCard = (element, pin) => {
     element.addEventListener(`click`, () => {
       const popupElement = getRenderCard(pin);
+      window.pins.removeActivePin();
+      element.classList.add(`map__pin--active`);
       const onPopupEscPress = (evt) => {
         if (evt.key === `Escape`) {
           closePopup();
@@ -17,6 +19,8 @@
 
       const closePopup = () => {
         if (document.querySelector(`.map__card`)) {
+          window.pins.removeActivePin();
+          element.classList.add(`map__pin--active`);
           document.querySelector(`.map__card`).remove();
           document.removeEventListener(`keydown`, onPopupEscPress);
         }
