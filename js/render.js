@@ -12,9 +12,7 @@
     load = data;
   });
 
-  const onFilterPins = (arr) => {
-    return arr.slice(0, MAX_PIN);
-  };
+  const onFilterPins = (arr) => arr.slice(0, MAX_PIN);
 
   const onFilterHousingType = (element) => {
     return element.offer.type === filterHousingType.value || filterHousingType.value === anyValue;
