@@ -68,6 +68,24 @@
     return fragment;
   };
 
+  const getRoomsText = (card) => {
+    let rooms = `комната`;
+    if (card.offer.rooms !== Number(`1`)) {
+      rooms = `комнаты`;
+    } if (card.offer.rooms === Number(`0`) || card.offer.rooms === Number(`35`)) {
+      rooms = `комнат`;
+    }
+    return rooms;
+  };
+
+  const getGuestsText = (card) => {
+    let guests = `гостя`;
+    if (card.offer.guests !== Number(`1`)) {
+      guests = `гостей`;
+    }
+    return guests;
+  };
+
   const getRenderCard = (card) => {
     const cardElement = cardTemplate.cloneNode(true);
     const photoElement = cardElement.querySelector(`.popup__photos`).querySelector(`.popup__photo`);
@@ -76,7 +94,7 @@
     cardElement.querySelector(`.popup__text--address`).textContent = card.offer.address;
     cardElement.querySelector(`.popup__text--price`).textContent = `${card.offer.price}₽/ночь`;
     cardElement.querySelector(`.popup__type`).textContent = window.data.offerType[card.offer.type];
-    cardElement.querySelector(`.popup__text--capacity`).textContent = `${card.offer.rooms} комнаты для ${card.offer.guests} гостей`;
+    cardElement.querySelector(`.popup__text--capacity`).textContent = `${card.offer.rooms} ${getRoomsText(card)} для ${card.offer.guests} ${getGuestsText(card)}`;
     cardElement.querySelector(`.popup__text--time`).textContent = `Заезд после ${card.offer.checkin}, выезд до ${card.offer.checkout}`;
     cardElement.querySelector(`.popup__features`).appendChild(getCreatedCardFeatures(card.offer.features));
     cardElement.querySelector(`.popup__description`).textContent = card.offer.description;
