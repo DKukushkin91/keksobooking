@@ -28,9 +28,10 @@
   };
 
   const Price = {
-    MIN: 1,
+    MIN: 10000,
     MAX: 50000,
   };
+
   const Room = {
     MIN: 1,
     MAX: 3,

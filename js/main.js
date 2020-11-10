@@ -1,19 +1,6 @@
 'use strict';
 
 (() => {
-  const pinListElement = document.querySelector(`.map__pins`);
-  const fragmentPin = document.createDocumentFragment();
-
-  const onCreatePins = () => {
-    window.load.dataRetrivial((data) => {
-      for (let pin of data) {
-        const pinElement = window.pins.getRenderPin(pin);
-        window.card.onPinOpenCard(pinElement, pin);
-        fragmentPin.appendChild(pinElement);
-      }
-    });
-  };
-  onCreatePins();
 
   window.util.setDisabled(document
                                 .querySelector(`.ad-form`)
@@ -28,9 +15,8 @@
   };
 
   const setActivePage = () => {
-    onCreatePins();
+    window.render.onCreatePins();
     setMapActive();
-    window.util.createPin(pinListElement, fragmentPin);
     window.util.setDisabled(document
                                   .querySelector(`.ad-form`)
                                   .querySelectorAll(`fieldset`), false);
@@ -42,6 +28,6 @@
   };
 
   window.main = {
-    setActivePage
+    setActivePage,
   };
 })();

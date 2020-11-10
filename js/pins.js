@@ -10,6 +10,13 @@
   };
   pinCoordinate();
 
+  const removeActivePin = () => {
+    let onMapActivePin = document.querySelector(`.map__pin--active`);
+    if (onMapActivePin) {
+      onMapActivePin.classList.remove(`map__pin--active`);
+    }
+  };
+
   const getRenderPin = (pin) => {
     const pinElement = pinTemplate.cloneNode(true);
     const pinElementSelector = pinElement.querySelector(`img`);
@@ -106,6 +113,7 @@
   window.pins = {
     getRenderPin,
     onPinMainActive,
-    pinCoordinate
+    pinCoordinate,
+    removeActivePin
   };
 })();
