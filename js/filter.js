@@ -12,6 +12,7 @@
   let load = [];
   window.load.dataRetrivial((data) => {
     load = data;
+    setFilteredPins();
   });
 
   const onFilterPins = (arr) => arr.slice(0, MAX_PIN);
@@ -52,11 +53,22 @@
     }));
   };
 
-  mapFilters.addEventListener(`change`, () => {
-    window.util.onPinsRemove();
-    window.util.onCardRemove();
-    window.render.onCreatePins();
-  });
+  const setFilteredPins = () => {
+    let createWidthDebounce = window.debounce(() => {
+      window.util.onPinsRemove();
+      window.util.onCardRemove();
+      window.render.onCreatePins();
+    });
+    mapFilters.addEventListener(`change`, () => {
+      createWidthDebounce();
+    });
+  };
+
+  // mapFilters.addEventListener(`change`, () => {
+  //   window.util.onPinsRemove();
+  //   window.util.onCardRemove();
+  //   window.debounce(window.render.onCreatePins());
+  // });
 
 
   window.filter = {
