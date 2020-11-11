@@ -64,13 +64,6 @@
     });
   };
 
-  // mapFilters.addEventListener(`change`, () => {
-  //   window.util.onPinsRemove();
-  //   window.util.onCardRemove();
-  //   window.debounce(window.render.onCreatePins());
-  // });
-
-
   window.filter = {
     onFilterMapAd
   };
