@@ -58,7 +58,7 @@ const restartPage = () => {
             .addEventListener(`mousedown`, window.pins.onPinMainActive);
   window.util.onPinStart();
   window.pins.pinCoordinate();
-
+  window.picture.removePreview();
 };
 
 window.util = {
