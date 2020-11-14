@@ -1,28 +1,24 @@
 "use strict";
 
 const FILE_TYPES = [`gif`, `jpg`, `jpeg`, `png`];
-const uploadAvatar = document.querySelector(`#avatar`);
-const previewAvatar = document.querySelector(`.ad-form-header__preview img`);
-const uploadPhoto = document.querySelector(`#images`);
-const adFormPhoto = document.querySelector(`.ad-form__photo`);
+const formAvatarElement = document.querySelector(`#avatar`);
+const formPreviewAvatarElement = document.querySelector(`.ad-form-header__preview img`);
+const formPhotoElement = document.querySelector(`#images`);
+const formPreviewPhotoElement = document.querySelector(`.ad-form__photo`);
 const defaultPreview = `img/muffin-grey.svg`;
 
-adFormPhoto.style.display = `flex`;
-adFormPhoto.style.alignItems = `center`;
-adFormPhoto.style.padding = `0 15px`;
-adFormPhoto.insertAdjacentHTML(`afterbegin`, `<img src="img/muffin-grey.svg" alt="Фотография жилья" width="40" height="44">`);
-const previewPhoto = adFormPhoto.firstChild;
+formPreviewPhotoElement.style.display = `flex`;
+formPreviewPhotoElement.style.alignItems = `center`;
+formPreviewPhotoElement.style.padding = `0 15px`;
+formPreviewPhotoElement.insertAdjacentHTML(`afterbegin`, `<img src="img/muffin-grey.svg" alt="Фотография жилья" width="40" height="44">`);
+const previewPhoto = formPreviewPhotoElement.firstChild;
 
-const getPictureSet = (element, attribute) => {
+const pictureUploadHandler = (element, attribute) => {
   element.addEventListener(`change`, () => {
     const file = element.files[0];
     const fileName = file.name.toLowerCase();
 
-    const matches = FILE_TYPES.some((it) => {
-      return fileName.endsWith(it);
-    });
-
-    if (matches) {
+    if (FILE_TYPES.some((it) => fileName.endsWith(it))) {
       const reader = new FileReader();
 
       reader.addEventListener(`load`, () => {
@@ -35,12 +31,12 @@ const getPictureSet = (element, attribute) => {
 };
 
 const removePreview = () => {
-  previewAvatar.src = defaultPreview;
+  formPreviewAvatarElement.src = defaultPreview;
   previewPhoto.src = defaultPreview;
 };
 
-getPictureSet(uploadAvatar, previewAvatar);
-getPictureSet(uploadPhoto, previewPhoto);
+pictureUploadHandler(formAvatarElement, formPreviewAvatarElement);
+pictureUploadHandler(formPhotoElement, previewPhoto);
 
 window.picture = {
   removePreview

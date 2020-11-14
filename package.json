@@ -20,7 +20,8 @@
   "dependencies": {},
   "scripts": {
     "build": "webpack",
-    "test": "eslint js/"
+    "test": "eslint js/",
+    "watch": "webpack --watch"
   },
   "engines": {
     "node": "8.11"

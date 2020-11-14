@@ -1,34 +1,61 @@
 'use strict';
 
-const roomInput = document.querySelector(`#room_number`);
-const capacityInput = document.querySelector(`#capacity`);
-const typeOfHousing = document.querySelector(`#type`);
-const pricePerNight = document.querySelector(`#price`);
-const pageForm = document.querySelector(`.ad-form`);
-const formResetButton = pageForm.querySelector(`.ad-form__reset`);
+const formAddressElement = document.querySelector(`#address`);
+const formRoomElement = document.querySelector(`#room_number`);
+const formCapacityElement = document.querySelector(`#capacity`);
+const formTypeElement = document.querySelector(`#type`);
+const formPriceElement = document.querySelector(`#price`);
+const formElement = document.querySelector(`.ad-form`);
+const formResetElement = formElement.querySelector(`.ad-form__reset`);
+const formSubmitElement = formElement.querySelector(`.ad-form__submit`);
+
+const writeAddress = (addressX, addressY) => {
+  formAddressElement.value = `${addressX}, ${addressY}`;
+};
+
+window.util.setDisabled(formElement.querySelectorAll(`fieldset`), true);
 
 const setActiveForm = () => {
-  pageForm.classList.remove(`ad-form--disabled`);
+  formElement.classList.remove(`ad-form--disabled`);
+};
+
+const restartPage = () => {
+  const mapFilters = document.querySelector(`.map__filters`);
+  formElement.reset();
+  mapFilters.reset();
+  formElement.classList.add(`ad-form--disabled`);
+  document.querySelector(`.map`).classList.add(`map--faded`);
+  window.main.pinsRemove();
+  window.util.setDisabled(formElement.querySelectorAll(`fieldset`), true);
+  window.util.setDisabled(mapFilters, true);
+  window.main.cardRemove();
+  document.querySelector(`.map__pin--main`).addEventListener(`mousedown`, window.pins.pinActivePageHandler);
+  window.pins.setPinStart();
+  window.pins.setPinCoordinate();
+  window.picture.removePreview();
 };
 
 const onRoomsValidation = () => {
   let validationMessage = ``;
 
-  if (roomInput.value < capacityInput.value || roomInput.value !== `100` && capacityInput.value === `0` || roomInput.value === `100` && capacityInput.value > `0`) {
+  if (formRoomElement.value < formCapacityElement.value || formRoomElement.value !== `100` && formCapacityElement.value === `0` || formRoomElement.value === `100` && formCapacityElement.value > `0`) {
     validationMessage = `Количество гостей, не должно привышать количество комнат, 100 комнат не для гостей`;
   }
 
-  roomInput.setCustomValidity(validationMessage);
+  formRoomElement.setCustomValidity(validationMessage);
+  formSubmitElement.removeEventListener(`click`, onRoomsValidation);
 };
+
+formSubmitElement.addEventListener(`click`, onRoomsValidation);
 
 const setElementAttribute = (element, attribute, value) => {
   element.setAttribute(attribute, value);
 };
 
-const onPriceValidation = () => {
+const setPriceValidation = () => {
   let minPrice = 0;
 
-  switch (typeOfHousing.value) {
+  switch (formTypeElement.value) {
     case `bungalow`:
       minPrice = window.data.MinPrice.BUNGALOW;
       break;
@@ -43,44 +70,42 @@ const onPriceValidation = () => {
       break;
   }
 
-  setElementAttribute(pricePerNight, `placeholder`, minPrice);
-  setElementAttribute(pricePerNight, `min`, minPrice);
+  setElementAttribute(formPriceElement, `placeholder`, minPrice);
+  setElementAttribute(formPriceElement, `min`, minPrice);
 };
 
-typeOfHousing.addEventListener(`click`, () => {
-  onPriceValidation();
-});
+formTypeElement.addEventListener(`click`, setPriceValidation);
 
-const timeInInput = document.querySelector(`#timein`);
-const timeOutInput = document.querySelector(`#timeout`);
+const formTimeInElement = document.querySelector(`#timein`);
+const formTimeOutElement = document.querySelector(`#timeout`);
 
 const onTimeValidation = (evt) => {
-  timeInInput.value = evt.target.value;
-  timeOutInput.value = evt.target.value;
+  formTimeInElement.value = evt.target.value;
+  formTimeOutElement.value = evt.target.value;
 };
 
-timeInInput.addEventListener(`change`, onTimeValidation);
-timeOutInput.addEventListener(`change`, onTimeValidation);
+formTimeInElement.addEventListener(`change`, onTimeValidation);
+formTimeOutElement.addEventListener(`change`, onTimeValidation);
 
-const onFormRestart = () => {
-  const onFormReset = (evt) => {
+const formRestartHandler = () => {
+  const restartHandler = (evt) => {
     evt.preventDefault();
-    formResetButton.removeEventListener(`click`, onFormReset);
-    window.util.restartPage();
+    formResetElement.removeEventListener(`click`, restartHandler);
+    restartPage();
   };
-  formResetButton.addEventListener(`click`, onFormReset);
+  formResetElement.addEventListener(`click`, restartHandler);
 };
 
-pageForm.addEventListener(`submit`, (evt) => {
-  window.upload.clientUpload(new FormData(pageForm), () => {
-    onRoomsValidation();
-    onPriceValidation();
+formElement.addEventListener(`submit`, (evt) => {
+  window.upload.clientUpload(new FormData(formElement), () => {
   });
   evt.preventDefault();
 });
 
 window.form = {
   setActiveForm,
-  onPriceValidation,
-  onFormRestart
+  setPriceValidation,
+  formRestartHandler,
+  writeAddress,
+  restartPage
 };

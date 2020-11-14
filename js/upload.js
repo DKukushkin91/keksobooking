@@ -1,26 +1,26 @@
 'use strict';
 
-const mainBlock = document.querySelector(`main`);
+const mainBlockElement = document.querySelector(`main`);
 const errorTemplate = document.querySelector(`#error`)
-                                .content;
+  .content;
 const successTemplate = document.querySelector(`#success`)
-                                  .content;
+  .content;
 
 const hideError = () => {
-  if (mainBlock.querySelector(`.error`)) {
-    mainBlock.querySelector(`.error`).remove();
+  if (mainBlockElement.querySelector(`.error`)) {
+    mainBlockElement.querySelector(`.error`).remove();
   }
 };
 
 const hideSuccess = () => {
-  if (mainBlock.querySelector(`.success`)) {
-    mainBlock.querySelector(`.success`).remove();
+  if (mainBlockElement.querySelector(`.success`)) {
+    mainBlockElement.querySelector(`.success`).remove();
   }
 };
 
-const showError = () => {
-  const errorElement = errorTemplate.cloneNode(true);
-  mainBlock.append(errorElement);
+const errorShowHandler = () => {
+  const errorCloneNode = errorTemplate.cloneNode(true);
+  mainBlockElement.append(errorCloneNode);
   document.addEventListener(`click`, hideError);
   document.addEventListener(`keydown`, (evt) => {
     if (evt.key === `Escape`) {
@@ -29,9 +29,9 @@ const showError = () => {
   });
 };
 
-const showSuccess = () => {
+const successShowHandler = () => {
   const successElement = successTemplate.cloneNode(true);
-  mainBlock.append(successElement);
+  mainBlockElement.append(successElement);
   document.addEventListener(`click`, hideSuccess);
   document.addEventListener(`keydown`, (evt) => {
     if (evt.key === `Escape`) {
@@ -47,19 +47,19 @@ const clientUpload = (data, onSuccess) => {
   xhr.addEventListener(`load`, () => {
     if (xhr.status === window.load.StatusCode.OK) {
       onSuccess(xhr.response);
-      window.util.restartPage();
-      showSuccess();
+      window.form.restartPage();
+      successShowHandler();
     } else {
-      showError();
+      errorShowHandler();
     }
   });
 
   xhr.addEventListener(`error`, () => {
-    showError();
+    errorShowHandler();
   });
 
   xhr.addEventListener(`timeout`, () => {
-    showError();
+    errorShowHandler();
   });
 
   xhr.timeout = window.load.TIMEOUT_IN_MS;

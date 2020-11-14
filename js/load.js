@@ -5,7 +5,7 @@ const StatusCode = {
   OK: 200
 };
 
-const showErrorElement = (text) => {
+const getShowErrorElement = (text) => {
   const errorElement = document.createElement(`div`);
   errorElement.style = `
       position: absolute;
@@ -25,8 +25,8 @@ const showErrorElement = (text) => {
       z-index: 100`;
   errorElement.textContent = text;
   document
-            .querySelector(`.map`)
-            .append(errorElement);
+    .querySelector(`.map`)
+    .append(errorElement);
   return errorElement;
 };
 
@@ -38,14 +38,14 @@ const dataRetrivial = (onSuccess, onError) => {
     if (xhr.status === StatusCode.OK) {
       onSuccess(xhr.response);
     } else {
-      onError(showErrorElement(`Статус ответа: ${xhr.status} ${xhr.statusText}`));
+      onError(getShowErrorElement(`Статус ответа: ${xhr.status} ${xhr.statusText}`));
     }
   });
   xhr.addEventListener(`error`, () => {
-    onError(showErrorElement(`Произошла ошибка соединения`));
+    onError(getShowErrorElement(`Произошла ошибка соединения`));
   });
   xhr.addEventListener(`timeout`, () => {
-    onError(showErrorElement(`Запрос не успел выполниться за ${xhr.timeout} мс`));
+    onError(getShowErrorElement(`Запрос не успел выполниться за ${xhr.timeout} мс`));
   });
 
   xhr.timeout = TIMEOUT_IN_MS;

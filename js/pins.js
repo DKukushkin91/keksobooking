@@ -1,42 +1,49 @@
 'use strict';
 
 const pinTemplate = document.querySelector(`#pin`)
-                              .content
-                              .querySelector(`.map__pin`);
-const mapPinHandle = document.querySelector(`.map__pin--main`);
-const pinCoordinate = () => {
-  window.util.writeAddress(mapPinHandle.offsetLeft, mapPinHandle.offsetTop);
+  .content
+  .querySelector(`.map__pin`);
+const mapMainPinElement = document.querySelector(`.map__pin--main`);
+
+const setPinCoordinate = () => {
+  window.form.writeAddress(mapMainPinElement.offsetLeft + window.data.TailSize.HEIGHT + window.data.TailSize.WIDTH, mapMainPinElement.offsetTop);
 };
-pinCoordinate();
+
+const setPinStart = () => {
+  mapMainPinElement.style.top = window.data.PinStart.Y;
+  mapMainPinElement.style.left = window.data.PinStart.X;
+};
+
+setPinCoordinate();
 
 const removeActivePin = () => {
-  let onMapActivePin = document.querySelector(`.map__pin--active`);
-  if (onMapActivePin) {
-    onMapActivePin.classList.remove(`map__pin--active`);
+  const mapPinActiveElement = document.querySelector(`.map__pin--active`);
+  if (mapPinActiveElement) {
+    mapPinActiveElement.classList.remove(`map__pin--active`);
   }
 };
 
 const getRenderPin = (pin) => {
-  const pinElement = pinTemplate.cloneNode(true);
-  const pinElementSelector = pinElement.querySelector(`img`);
-  pinElementSelector.src = pin.author.avatar;
-  pinElementSelector.alt = pin.offer.title;
-  pinElement.style.left = `${pin.location.x - window.data.PinSize.WIDTH}px`;
-  pinElement.style.top = `${pin.location.y - window.data.PinSize.HEIGHT}px`;
-  return pinElement;
+  const pinCloneNode = pinTemplate.cloneNode(true);
+  const pinElement = pinCloneNode.querySelector(`img`);
+  pinElement.src = pin.author.avatar;
+  pinElement.alt = pin.offer.title;
+  pinCloneNode.style.left = `${pin.location.x - window.data.PinSize.WIDTH}px`;
+  pinCloneNode.style.top = `${pin.location.y - window.data.PinSize.HEIGHT}px`;
+  return pinCloneNode;
 };
 
-const onPinMainActive = (evt) => {
+const pinActivePageHandler = (evt) => {
   if (evt.button === 0) {
     window.main.setActivePage();
-    window.util.onPinStart();
-    mapPinHandle.removeEventListener(`mousedown`, onPinMainActive);
+    setPinStart();
+    mapMainPinElement.removeEventListener(`mousedown`, pinActivePageHandler);
   }
 };
 
-const checkXPin = (x) => {
-  const maxX = window.data.MapX.MAX - window.data.PinSize.WIDTH;
-  const minX = window.data.MapX.MIN;
+const getCheckXPin = (x) => {
+  const maxX = window.data.MapX.MAX - window.data.PinSize.WIDTH / 2;
+  const minX = window.data.MapX.MIN - window.data.PinSize.WIDTH / 2;
   if (x > maxX) {
     return maxX;
   }
@@ -47,7 +54,7 @@ const checkXPin = (x) => {
   return x;
 };
 
-const checkYPin = (y) => {
+const getCheckYPin = (y) => {
   const minY = window.data.MapY.MIN - window.data.PinSize.HEIGHT;
   if (y > window.data.MapY.MAX) {
     return window.data.MapY.MAX;
@@ -59,18 +66,18 @@ const checkYPin = (y) => {
   return y;
 };
 
-mapPinHandle.addEventListener(`mousedown`, (evt) => {
+mapMainPinElement.addEventListener(`mousedown`, (evt) => {
   evt.preventDefault();
   let startCoords = {
     x: evt.clientX,
     y: evt.clientY
   };
 
-  const onMouseMove = (moveEvt) => {
+  const mouseMoveHandler = (moveEvt) => {
     moveEvt.preventDefault();
-    pinCoordinate();
+    setPinCoordinate();
 
-    let shift = {
+    const shift = {
       x: startCoords.x - moveEvt.clientX,
       y: startCoords.y - moveEvt.clientY
     };
@@ -80,38 +87,39 @@ mapPinHandle.addEventListener(`mousedown`, (evt) => {
       y: moveEvt.clientY
     };
 
-    const newX = mapPinHandle.offsetLeft - shift.x;
-    const newY = mapPinHandle.offsetTop - shift.y;
+    const newX = mapMainPinElement.offsetLeft - shift.x;
+    const newY = mapMainPinElement.offsetTop - shift.y;
 
-    mapPinHandle.style.left = `${checkXPin(newX)}px`;
-    mapPinHandle.style.top = `${checkYPin(newY)}px`;
+    mapMainPinElement.style.left = `${getCheckXPin(newX)}px`;
+    mapMainPinElement.style.top = `${getCheckYPin(newY)}px`;
   };
 
-  const onMouseUp = (upEvt) => {
+  const mouseUpHandler = (upEvt) => {
     upEvt.preventDefault();
-    document.removeEventListener(`mousemove`, onMouseMove);
-    document.removeEventListener(`mouseup`, onMouseUp);
+    document.removeEventListener(`mousemove`, mouseMoveHandler);
+    document.removeEventListener(`mouseup`, mouseUpHandler);
   };
 
-  document.addEventListener(`mousemove`, onMouseMove);
-  document.addEventListener(`mouseup`, onMouseUp);
+  document.addEventListener(`mousemove`, mouseMoveHandler);
+  document.addEventListener(`mouseup`, mouseUpHandler);
 });
 
-mapPinHandle.addEventListener(`mousedown`, onPinMainActive);
+mapMainPinElement.addEventListener(`mousedown`, pinActivePageHandler);
 
-const onPinMainEvent = (evt) => {
+const pinKeydownHandler = (evt) => {
   if (evt.key === `Enter`) {
     window.main.setActivePage();
-    window.util.writeAddress(mapPinHandle.offsetLeft, mapPinHandle.offsetTop);
-    mapPinHandle.removeEventListener(`keydown`, onPinMainEvent);
+    window.form.writeAddress(mapMainPinElement.offsetLeft, mapMainPinElement.offsetTop);
+    mapMainPinElement.removeEventListener(`keydown`, pinKeydownHandler);
   }
 };
 
-mapPinHandle.addEventListener(`keydown`, onPinMainEvent);
+mapMainPinElement.addEventListener(`keydown`, pinKeydownHandler);
 
 window.pins = {
   getRenderPin,
-  onPinMainActive,
-  pinCoordinate,
-  removeActivePin
+  pinActivePageHandler,
+  setPinCoordinate,
+  removeActivePin,
+  setPinStart
 };
