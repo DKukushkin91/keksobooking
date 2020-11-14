@@ -55,7 +55,7 @@ const getCheckXPin = (x) => {
 };
 
 const getCheckYPin = (y) => {
-  const minY = window.data.MapY.MIN - window.data.PinSize.HEIGHT;
+  const minY = window.data.MapY.MIN;
   if (y > window.data.MapY.MAX) {
     return window.data.MapY.MAX;
   }

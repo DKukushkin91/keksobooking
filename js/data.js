@@ -35,16 +35,6 @@ const Room = {
   MAX: 3,
 };
 
-const LocationX = {
-  MIN: 130,
-  MAX: 1100,
-};
-
-const LocationY = {
-  MIN: 130,
-  MAX: 630,
-};
-
 const MinPrice = {
   BUNGALOW: 0,
   FLAT: 1000,
@@ -63,8 +53,6 @@ window.data = {
   PinSize,
   Price,
   Room,
-  LocationX,
-  LocationY,
   MinPrice,
   offerType,
   MapX,

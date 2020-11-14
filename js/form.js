@@ -33,9 +33,10 @@ const restartPage = () => {
   window.pins.setPinStart();
   window.pins.setPinCoordinate();
   window.picture.removePreview();
+  priceValidationHandler();
 };
 
-const onRoomsValidation = () => {
+const roomsValidationHandler = () => {
   let validationMessage = ``;
 
   if (formRoomElement.value < formCapacityElement.value || formRoomElement.value !== `100` && formCapacityElement.value === `0` || formRoomElement.value === `100` && formCapacityElement.value > `0`) {
@@ -43,16 +44,15 @@ const onRoomsValidation = () => {
   }
 
   formRoomElement.setCustomValidity(validationMessage);
-  formSubmitElement.removeEventListener(`click`, onRoomsValidation);
 };
 
-formSubmitElement.addEventListener(`click`, onRoomsValidation);
+formSubmitElement.addEventListener(`click`, roomsValidationHandler);
 
 const setElementAttribute = (element, attribute, value) => {
   element.setAttribute(attribute, value);
 };
 
-const setPriceValidation = () => {
+const priceValidationHandler = () => {
   let minPrice = 0;
 
   switch (formTypeElement.value) {
@@ -74,18 +74,19 @@ const setPriceValidation = () => {
   setElementAttribute(formPriceElement, `min`, minPrice);
 };
 
-formTypeElement.addEventListener(`click`, setPriceValidation);
+priceValidationHandler();
+formTypeElement.addEventListener(`change`, priceValidationHandler);
 
 const formTimeInElement = document.querySelector(`#timein`);
 const formTimeOutElement = document.querySelector(`#timeout`);
 
-const onTimeValidation = (evt) => {
+const timeValidationHandler = (evt) => {
   formTimeInElement.value = evt.target.value;
   formTimeOutElement.value = evt.target.value;
 };
 
-formTimeInElement.addEventListener(`change`, onTimeValidation);
-formTimeOutElement.addEventListener(`change`, onTimeValidation);
+formTimeInElement.addEventListener(`change`, timeValidationHandler);
+formTimeOutElement.addEventListener(`change`, timeValidationHandler);
 
 const formRestartHandler = () => {
   const restartHandler = (evt) => {
@@ -104,7 +105,7 @@ formElement.addEventListener(`submit`, (evt) => {
 
 window.form = {
   setActiveForm,
-  setPriceValidation,
+  priceValidationHandler,
   formRestartHandler,
   writeAddress,
   restartPage

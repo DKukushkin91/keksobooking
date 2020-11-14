@@ -7,6 +7,19 @@ const setMapActive = () => {
   mapElement.classList.remove(`map--faded`);
 };
 
+const setActivePage = () => {
+  createElements();
+  setMapActive();
+  window.util.setDisabled(document
+    .querySelector(`.ad-form`)
+    .querySelectorAll(`fieldset`), false);
+  window.util.setDisabled(document
+    .querySelector(`.map__filters`), false);
+  window.form.setActiveForm();
+  window.form.formRestartHandler();
+  window.form.priceValidationHandler();
+};
+
 const createElements = () => {
   const fragmentPin = document.createDocumentFragment();
   window.filter.getFilterMapAd();
@@ -42,19 +55,6 @@ const cardRemove = () => {
 const pinsRemove = () => {
   document.querySelectorAll(`.map__pins [type="button"]`)
     .forEach((button) => button.remove());
-};
-
-const setActivePage = () => {
-  createElements();
-  setMapActive();
-  window.util.setDisabled(document
-    .querySelector(`.ad-form`)
-    .querySelectorAll(`fieldset`), false);
-  window.util.setDisabled(document
-    .querySelector(`.map__filters`), false);
-  window.form.setActiveForm();
-  window.form.setPriceValidation();
-  window.form.formRestartHandler();
 };
 
 window.main = {
