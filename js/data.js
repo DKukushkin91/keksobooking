@@ -1,13 +1,19 @@
 'use strict';
 
 const PinStart = {
-  X: `${570}px`,
-  Y: `${375}px`
+  X: 570,
+  Y: 375
 };
+
+const SmallPin = {
+  WIDTH: 50,
+  HEIGHT: 70
+}
 
 const PinSize = {
   WIDTH: 65,
   HEIGHT: 65,
+  POINTER: 5
 };
 
 const TailSize = {
@@ -21,8 +27,8 @@ const MapX = {
 };
 
 const MapY = {
-  MIN: 130,
-  MAX: 630
+  MIN: 138,
+  MAX: 551
 };
 
 const Price = {
@@ -58,6 +64,7 @@ window.data = {
   MapX,
   MapY,
   PinStart,
-  TailSize
+  TailSize,
+  SmallPin
 };
 

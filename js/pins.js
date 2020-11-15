@@ -5,38 +5,38 @@ const pinTemplate = document.querySelector(`#pin`)
   .querySelector(`.map__pin`);
 const mapMainPinElement = document.querySelector(`.map__pin--main`);
 
-const setPinCoordinate = () => {
-  window.form.writeAddress(mapMainPinElement.offsetLeft + window.data.TailSize.HEIGHT + window.data.TailSize.WIDTH, mapMainPinElement.offsetTop);
+const setElementCoordinate = () => {
+  window.form.writeAddress(mapMainPinElement.offsetLeft,
+ mapMainPinElement.offsetTop + window.data.PinSize.WIDTH - (window.data.PinSize.POINTER * 2) + (window.data.PinSize.POINTER / 2));
 };
 
-const setPinStart = () => {
-  mapMainPinElement.style.top = window.data.PinStart.Y;
-  mapMainPinElement.style.left = window.data.PinStart.X;
+const setElementStart = () => {
+  mapMainPinElement.style.top = `${window.data.PinStart.Y}px`;
+  mapMainPinElement.style.left = `${window.data.PinStart.X}px`;
 };
 
-setPinCoordinate();
-
-const removeActivePin = () => {
+const removeActiveElement = () => {
   const mapPinActiveElement = document.querySelector(`.map__pin--active`);
   if (mapPinActiveElement) {
     mapPinActiveElement.classList.remove(`map__pin--active`);
   }
 };
 
-const getRenderPin = (pin) => {
+const getRenderElement = (pin) => {
   const pinCloneNode = pinTemplate.cloneNode(true);
   const pinElement = pinCloneNode.querySelector(`img`);
   pinElement.src = pin.author.avatar;
   pinElement.alt = pin.offer.title;
-  pinCloneNode.style.left = `${pin.location.x - window.data.PinSize.WIDTH}px`;
-  pinCloneNode.style.top = `${pin.location.y - window.data.PinSize.HEIGHT}px`;
+  pinCloneNode.style.left = `${pin.location.x - window.data.SmallPin.WIDTH}px`;
+  pinCloneNode.style.top = `${pin.location.y - window.data.SmallPin.HEIGHT}px`;
   return pinCloneNode;
 };
 
 const pinActivePageHandler = (evt) => {
   if (evt.button === 0) {
     window.main.setActivePage();
-    setPinStart();
+    window.form.writeAddress(mapMainPinElement.offsetLeft - window.data.PinSize.POINTER / 2,
+      mapMainPinElement.offsetTop + window.data.TailSize.HEIGHT / 2 - window.data.TailSize.WIDTH);
     mapMainPinElement.removeEventListener(`mousedown`, pinActivePageHandler);
   }
 };
@@ -55,7 +55,7 @@ const getCheckXPin = (x) => {
 };
 
 const getCheckYPin = (y) => {
-  const minY = window.data.MapY.MIN;
+  const minY = window.data.MapY.MIN - window.data.PinSize.WIDTH - window.data.TailSize.HEIGHT;
   if (y > window.data.MapY.MAX) {
     return window.data.MapY.MAX;
   }
@@ -75,7 +75,7 @@ mapMainPinElement.addEventListener(`mousedown`, (evt) => {
 
   const mouseMoveHandler = (moveEvt) => {
     moveEvt.preventDefault();
-    setPinCoordinate();
+    setElementCoordinate();
 
     const shift = {
       x: startCoords.x - moveEvt.clientX,
@@ -117,9 +117,9 @@ const pinKeydownHandler = (evt) => {
 mapMainPinElement.addEventListener(`keydown`, pinKeydownHandler);
 
 window.pins = {
-  getRenderPin,
+  getRenderElement,
   pinActivePageHandler,
-  setPinCoordinate,
-  removeActivePin,
-  setPinStart
+  setElementCoordinate,
+  removeActiveElement,
+  setElementStart,
 };

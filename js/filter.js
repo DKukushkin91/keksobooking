@@ -11,7 +11,7 @@ const filterGuestsElement = document.querySelector(`#housing-guests`);
 window.util.setDisabled(mapFilterElement, true);
 
 let info = [];
-window.load.dataRetrivial((data) => {
+window.load.dataLoadingHandler((data) => {
   info = data;
   setFilteredPins();
 });
@@ -44,7 +44,7 @@ const getFilterHousingFeatures = (elements) => {
   return featuresCheckedElements.every((element) => elements.includes(element.value));
 };
 
-const getFilterMapAd = () => {
+const getRenderMapAd = () => {
   return getFilterPins(info.filter((ad) => {
     return getFilterHousingType(ad) &&
       getFilterHousingPrice(ad.offer.price) &&
@@ -56,8 +56,8 @@ const getFilterMapAd = () => {
 
 const setFilteredPins = () => {
   const createWidthDebounce = window.debounce(() => {
-    window.main.pinsRemove();
-    window.main.cardRemove();
+    window.main.removePins();
+    window.main.removeCard();
     window.main.createElements();
   });
   mapFilterElement.addEventListener(`change`, () => {
@@ -66,5 +66,5 @@ const setFilteredPins = () => {
 };
 
 window.filter = {
-  getFilterMapAd
+  getRenderMapAd
 };

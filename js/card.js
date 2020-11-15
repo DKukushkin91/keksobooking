@@ -53,7 +53,7 @@ const getRoomsText = (card) => {
 
 const getGuestText = (card) => card.offer.guests !== NumberOfCapacity.ONE ? `гостей` : `гостя`;
 
-const getRenderCard = (card) => {
+const getRenderElement = (card) => {
   const cardCloneNode = cardTemplate.cloneNode(true);
   const photoElement = cardCloneNode.querySelector(`.popup__photos`).querySelector(`.popup__photo`);
   const closeMapCard = cardCloneNode.querySelector(`.popup__close`);
@@ -80,14 +80,14 @@ const getRenderCard = (card) => {
 const popupCloseHandler = () => {
   const mapPopupElement = document.querySelector(`.map__card`);
   if (mapPopupElement) {
-    window.pins.removeActivePin();
+    window.pins.removeActiveElement();
     mapPopupElement.remove();
     document.removeEventListener(`keydown`, escPressHandler);
   }
 };
 
 window.card = {
-  getRenderCard,
+  getRenderElement,
   popupCloseHandler,
   escPressHandler
 };

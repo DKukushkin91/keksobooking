@@ -40,7 +40,7 @@ const successShowHandler = () => {
   });
 };
 
-const clientUpload = (data, onSuccess) => {
+const dataSendingHandler = (data, onSuccess) => {
   const xhr = new XMLHttpRequest();
   xhr.responseType = `json`;
 
@@ -69,5 +69,5 @@ const clientUpload = (data, onSuccess) => {
 };
 
 window.upload = {
-  clientUpload
+  dataSendingHandler
 };

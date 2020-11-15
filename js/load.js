@@ -30,7 +30,7 @@ const getShowErrorElement = (text) => {
   return errorElement;
 };
 
-const dataRetrivial = (onSuccess, onError) => {
+const dataLoadingHandler = (onSuccess, onError) => {
   const xhr = new XMLHttpRequest();
   xhr.responseType = `json`;
 
@@ -55,7 +55,7 @@ const dataRetrivial = (onSuccess, onError) => {
 };
 
 window.load = {
-  dataRetrivial,
+  dataLoadingHandler,
   StatusCode,
   TIMEOUT_IN_MS
 };

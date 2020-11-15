@@ -1,16 +1,16 @@
-"use strict";
+'use strict';
 
 const FILE_TYPES = [`gif`, `jpg`, `jpeg`, `png`];
+const DEFAULT_PREVIEW = `img/muffin-grey.svg`;
 const formAvatarElement = document.querySelector(`#avatar`);
 const formPreviewAvatarElement = document.querySelector(`.ad-form-header__preview img`);
 const formPhotoElement = document.querySelector(`#images`);
 const formPreviewPhotoElement = document.querySelector(`.ad-form__photo`);
-const defaultPreview = `img/muffin-grey.svg`;
 
 formPreviewPhotoElement.style.display = `flex`;
 formPreviewPhotoElement.style.alignItems = `center`;
-formPreviewPhotoElement.style.padding = `0 15px`;
-formPreviewPhotoElement.insertAdjacentHTML(`afterbegin`, `<img src="img/muffin-grey.svg" alt="Фотография жилья" width="40" height="44">`);
+formPreviewPhotoElement.style.padding = `13px 15px`;
+formPreviewPhotoElement.insertAdjacentHTML(`afterbegin`, `<img width="40">`);
 const previewPhoto = formPreviewPhotoElement.firstChild;
 
 const pictureUploadHandler = (element, attribute) => {
@@ -31,8 +31,8 @@ const pictureUploadHandler = (element, attribute) => {
 };
 
 const removePreview = () => {
-  formPreviewAvatarElement.src = defaultPreview;
-  previewPhoto.src = defaultPreview;
+  formPreviewAvatarElement.src = DEFAULT_PREVIEW;
+  previewPhoto.src = ``;
 };
 
 pictureUploadHandler(formAvatarElement, formPreviewAvatarElement);

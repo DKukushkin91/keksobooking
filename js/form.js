@@ -10,12 +10,18 @@ const formResetElement = formElement.querySelector(`.ad-form__reset`);
 const formSubmitElement = formElement.querySelector(`.ad-form__submit`);
 
 const writeAddress = (addressX, addressY) => {
-  formAddressElement.value = `${addressX}, ${addressY}`;
+  if (document.querySelector(`.map--faded`)){
+  formAddressElement.value = `${window.data.PinStart.X + window.data.PinSize.WIDTH / 2 - window.data.PinSize.POINTER / 2},
+ ${window.data.PinStart.Y}`;
+  } else {
+    formAddressElement.value = `${Math.floor(addressX + window.data.TailSize.WIDTH + window.data.TailSize.HEIGHT)},
+ ${Math.floor(addressY + window.data.TailSize.HEIGHT)}`;
+  }
 };
-
+writeAddress();
 window.util.setDisabled(formElement.querySelectorAll(`fieldset`), true);
 
-const setActiveForm = () => {
+const setActiveElement = () => {
   formElement.classList.remove(`ad-form--disabled`);
 };
 
@@ -25,20 +31,20 @@ const restartPage = () => {
   mapFilters.reset();
   formElement.classList.add(`ad-form--disabled`);
   document.querySelector(`.map`).classList.add(`map--faded`);
-  window.main.pinsRemove();
+  window.main.removePins();
   window.util.setDisabled(formElement.querySelectorAll(`fieldset`), true);
   window.util.setDisabled(mapFilters, true);
-  window.main.cardRemove();
+  window.main.removeCard();
   document.querySelector(`.map__pin--main`).addEventListener(`mousedown`, window.pins.pinActivePageHandler);
-  window.pins.setPinStart();
-  window.pins.setPinCoordinate();
+  window.pins.setElementStart();
+  window.pins.setElementCoordinate();
   window.picture.removePreview();
   priceValidationHandler();
 };
 
 const roomsValidationHandler = () => {
   let validationMessage = ``;
-
+  formSubmitElement.removeEventListener(`click`, roomsValidationHandler);
   if (formRoomElement.value < formCapacityElement.value || formRoomElement.value !== `100` && formCapacityElement.value === `0` || formRoomElement.value === `100` && formCapacityElement.value > `0`) {
     validationMessage = `Количество гостей, не должно привышать количество комнат, 100 комнат не для гостей`;
   }
@@ -88,7 +94,7 @@ const timeValidationHandler = (evt) => {
 formTimeInElement.addEventListener(`change`, timeValidationHandler);
 formTimeOutElement.addEventListener(`change`, timeValidationHandler);
 
-const formRestartHandler = () => {
+const buttonRestartHandler = () => {
   const restartHandler = (evt) => {
     evt.preventDefault();
     formResetElement.removeEventListener(`click`, restartHandler);
@@ -98,15 +104,15 @@ const formRestartHandler = () => {
 };
 
 formElement.addEventListener(`submit`, (evt) => {
-  window.upload.clientUpload(new FormData(formElement), () => {
+  window.upload.dataSendingHandler(new FormData(formElement), () => {
   });
   evt.preventDefault();
 });
 
 window.form = {
-  setActiveForm,
+  setActiveElement,
   priceValidationHandler,
-  formRestartHandler,
+  buttonRestartHandler,
   writeAddress,
   restartPage
 };
