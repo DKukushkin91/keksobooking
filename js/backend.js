@@ -1,4 +1,4 @@
-
+'use strict';
 const xhrHandler = (restart, success, error) => {
 xhr.addEventListener(`load`, () => {
   if (xhr.status === StatusCode.OK) {

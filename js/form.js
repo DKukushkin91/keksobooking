@@ -44,11 +44,9 @@ const restartPage = () => {
 
 const roomsValidationHandler = () => {
   let validationMessage = ``;
-  formSubmitElement.removeEventListener(`click`, roomsValidationHandler);
   if (formRoomElement.value < formCapacityElement.value || formRoomElement.value !== `100` && formCapacityElement.value === `0` || formRoomElement.value === `100` && formCapacityElement.value > `0`) {
     validationMessage = `Количество гостей, не должно привышать количество комнат, 100 комнат не для гостей`;
   }
-
   formRoomElement.setCustomValidity(validationMessage);
 };
 
@@ -104,10 +102,12 @@ const buttonRestartHandler = () => {
 };
 
 formElement.addEventListener(`submit`, (evt) => {
+  formSubmitElement.removeEventListener(`click`, roomsValidationHandler);
   window.upload.dataSendingHandler(new FormData(formElement), () => {
   });
   evt.preventDefault();
 });
+
 
 window.form = {
   setActiveElement,

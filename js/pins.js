@@ -22,6 +22,11 @@ const removeActiveElement = () => {
   }
 };
 
+const loadPinCoordinate = () => {
+  window.form.writeAddress(mapMainPinElement.offsetLeft - Math.floor(window.data.PinSize.POINTER / 2),
+  mapMainPinElement.offsetTop + window.data.TailSize.WIDTH / 2 - window.data.TailSize.WIDTH / 2);
+};
+
 const getRenderElement = (pin) => {
   const pinCloneNode = pinTemplate.cloneNode(true);
   const pinElement = pinCloneNode.querySelector(`img`);
@@ -35,15 +40,14 @@ const getRenderElement = (pin) => {
 const pinActivePageHandler = (evt) => {
   if (evt.button === 0) {
     window.main.setActivePage();
-    window.form.writeAddress(mapMainPinElement.offsetLeft - window.data.PinSize.POINTER / 2,
-      mapMainPinElement.offsetTop + window.data.TailSize.HEIGHT / 2 - window.data.TailSize.WIDTH);
+    loadPinCoordinate();
     mapMainPinElement.removeEventListener(`mousedown`, pinActivePageHandler);
   }
 };
 
 const getCheckXPin = (x) => {
   const maxX = window.data.MapX.MAX - window.data.PinSize.WIDTH / 2;
-  const minX = window.data.MapX.MIN - window.data.PinSize.WIDTH / 2;
+  const minX = window.data.MapX.MIN - Math.floor(window.data.PinSize.WIDTH / 2);
   if (x > maxX) {
     return maxX;
   }
@@ -109,7 +113,7 @@ mapMainPinElement.addEventListener(`mousedown`, pinActivePageHandler);
 const pinKeydownHandler = (evt) => {
   if (evt.key === `Enter`) {
     window.main.setActivePage();
-    window.form.writeAddress(mapMainPinElement.offsetLeft, mapMainPinElement.offsetTop);
+    loadPinCoordinate();
     mapMainPinElement.removeEventListener(`keydown`, pinKeydownHandler);
   }
 };
