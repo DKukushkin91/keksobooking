@@ -7,25 +7,10 @@ const mapPinListElement = document.querySelector(`.map__pins`);
 const setMapActive = () => {
   mapElement.classList.remove(`map--faded`);
 };
-
-const setActivePage = () => {
-  createElements();
-  setMapActive();
-  window.util.setDisabled(document
-    .querySelector(`.ad-form`)
-    .querySelectorAll(`fieldset`), false);
-  window.util.setDisabled(document
-    .querySelector(`.map__filters`), false);
-  window.form.setActiveElement();
-  window.form.buttonRestartHandler();
-  window.form.priceValidationHandler();
-};
-
+window.filter.getFilteredData();
 const createElements = () => {
   const fragmentPin = document.createDocumentFragment();
-  window.filter.getRenderMapAd();
-
-  for (let pin of window.filter.getRenderMapAd()) {
+  for (let pin of window.filter.getFilteredData()) {
     const pinElement = window.pins.getRenderElement(pin);
     pinOpenCardHandler(pinElement, pin);
     fragmentPin.appendChild(pinElement);
@@ -46,22 +31,21 @@ const pinOpenCardHandler = (element, pin) => {
   });
 };
 
-const removeCard = () => {
-  const mapPopupElement = document.querySelector(`.map__card`);
-  if (mapPopupElement) {
-    mapPopupElement.remove();
-  }
-};
-
-const removePins = () => {
-  document.querySelectorAll(`.map__pins [type="button"]`)
-    .forEach((button) => button.remove());
+const setActivePage = () => {
+  createElements();
+  setMapActive();
+  window.util.setDisabled(document
+    .querySelector(`.ad-form`)
+    .querySelectorAll(`fieldset`), false);
+  window.util.setDisabled(document
+    .querySelector(`.map__filters`), false);
+  window.form.setActiveElement();
+  window.form.buttonRestartHandler();
+  window.form.priceValidationHandler();
 };
 
 window.main = {
   setActivePage,
-  removePins,
-  removeCard,
   createElements,
 };
 

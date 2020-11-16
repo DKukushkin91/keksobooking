@@ -1,13 +1,18 @@
 'use strict';
 
+const formAddressElement = document.querySelector(`#address`);
 const pinTemplate = document.querySelector(`#pin`)
   .content
   .querySelector(`.map__pin`);
 const mapMainPinElement = document.querySelector(`.map__pin--main`);
 
+const writeAddress = (addressX, addressY) => {
+  formAddressElement.value = `${addressX}, ${addressY}`;
+};
+
 const setElementCoordinate = () => {
-  window.form.writeAddress(mapMainPinElement.offsetLeft,
- mapMainPinElement.offsetTop + window.data.PinSize.WIDTH - (window.data.PinSize.POINTER * 2) + (window.data.PinSize.POINTER / 2));
+  writeAddress(mapMainPinElement.offsetLeft + Math.floor(window.data.PinSize.WIDTH / 2),
+      mapMainPinElement.offsetTop + window.data.PinSize.WIDTH + window.data.TailSize.HEIGHT);
 };
 
 const setElementStart = () => {
@@ -23,10 +28,10 @@ const removeActiveElement = () => {
 };
 
 const loadPinCoordinate = () => {
-  window.form.writeAddress(mapMainPinElement.offsetLeft - Math.floor(window.data.PinSize.POINTER / 2),
-  mapMainPinElement.offsetTop + window.data.TailSize.WIDTH / 2 - window.data.TailSize.WIDTH / 2);
+  writeAddress(mapMainPinElement.offsetLeft + Math.floor(window.data.PinSize.WIDTH / 2), mapMainPinElement.offsetTop + Math.floor(window.data.PinSize.WIDTH / 2));
 };
 
+loadPinCoordinate();
 const getRenderElement = (pin) => {
   const pinCloneNode = pinTemplate.cloneNode(true);
   const pinElement = pinCloneNode.querySelector(`img`);
@@ -40,7 +45,7 @@ const getRenderElement = (pin) => {
 const pinActivePageHandler = (evt) => {
   if (evt.button === 0) {
     window.main.setActivePage();
-    loadPinCoordinate();
+    setElementCoordinate();
     mapMainPinElement.removeEventListener(`mousedown`, pinActivePageHandler);
   }
 };
@@ -80,7 +85,6 @@ mapMainPinElement.addEventListener(`mousedown`, (evt) => {
   const mouseMoveHandler = (moveEvt) => {
     moveEvt.preventDefault();
     setElementCoordinate();
-
     const shift = {
       x: startCoords.x - moveEvt.clientX,
       y: startCoords.y - moveEvt.clientY
@@ -113,7 +117,7 @@ mapMainPinElement.addEventListener(`mousedown`, pinActivePageHandler);
 const pinKeydownHandler = (evt) => {
   if (evt.key === `Enter`) {
     window.main.setActivePage();
-    loadPinCoordinate();
+    setElementCoordinate();
     mapMainPinElement.removeEventListener(`keydown`, pinKeydownHandler);
   }
 };
@@ -123,7 +127,7 @@ mapMainPinElement.addEventListener(`keydown`, pinKeydownHandler);
 window.pins = {
   getRenderElement,
   pinActivePageHandler,
-  setElementCoordinate,
+  loadPinCoordinate,
   removeActiveElement,
   setElementStart,
 };

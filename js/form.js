@@ -1,6 +1,5 @@
 'use strict';
 
-const formAddressElement = document.querySelector(`#address`);
 const formRoomElement = document.querySelector(`#room_number`);
 const formCapacityElement = document.querySelector(`#capacity`);
 const formTypeElement = document.querySelector(`#type`);
@@ -9,37 +8,10 @@ const formElement = document.querySelector(`.ad-form`);
 const formResetElement = formElement.querySelector(`.ad-form__reset`);
 const formSubmitElement = formElement.querySelector(`.ad-form__submit`);
 
-const writeAddress = (addressX, addressY) => {
-  if (document.querySelector(`.map--faded`)){
-  formAddressElement.value = `${window.data.PinStart.X + window.data.PinSize.WIDTH / 2 - window.data.PinSize.POINTER / 2},
- ${window.data.PinStart.Y}`;
-  } else {
-    formAddressElement.value = `${Math.floor(addressX + window.data.TailSize.WIDTH + window.data.TailSize.HEIGHT)},
- ${Math.floor(addressY + window.data.TailSize.HEIGHT)}`;
-  }
-};
-writeAddress();
 window.util.setDisabled(formElement.querySelectorAll(`fieldset`), true);
 
 const setActiveElement = () => {
   formElement.classList.remove(`ad-form--disabled`);
-};
-
-const restartPage = () => {
-  const mapFilters = document.querySelector(`.map__filters`);
-  formElement.reset();
-  mapFilters.reset();
-  formElement.classList.add(`ad-form--disabled`);
-  document.querySelector(`.map`).classList.add(`map--faded`);
-  window.main.removePins();
-  window.util.setDisabled(formElement.querySelectorAll(`fieldset`), true);
-  window.util.setDisabled(mapFilters, true);
-  window.main.removeCard();
-  document.querySelector(`.map__pin--main`).addEventListener(`mousedown`, window.pins.pinActivePageHandler);
-  window.pins.setElementStart();
-  window.pins.setElementCoordinate();
-  window.picture.removePreview();
-  priceValidationHandler();
 };
 
 const roomsValidationHandler = () => {
@@ -92,6 +64,36 @@ const timeValidationHandler = (evt) => {
 formTimeInElement.addEventListener(`change`, timeValidationHandler);
 formTimeOutElement.addEventListener(`change`, timeValidationHandler);
 
+
+const removePins = () => {
+  document.querySelectorAll(`.map__pins [type="button"]`)
+    .forEach((button) => button.remove());
+};
+
+const removeCard = () => {
+  const mapPopupElement = document.querySelector(`.map__card`);
+  if (mapPopupElement) {
+    mapPopupElement.remove();
+  }
+};
+
+const restartPage = () => {
+  const mapFilters = document.querySelector(`.map__filters`);
+  formElement.reset();
+  mapFilters.reset();
+  formElement.classList.add(`ad-form--disabled`);
+  document.querySelector(`.map`).classList.add(`map--faded`);
+  removePins();
+  window.util.setDisabled(formElement.querySelectorAll(`fieldset`), true);
+  window.util.setDisabled(mapFilters, true);
+  removeCard();
+  document.querySelector(`.map__pin--main`).addEventListener(`mousedown`, window.pins.pinActivePageHandler);
+  window.pins.setElementStart();
+  window.pins.loadPinCoordinate();
+  window.picture.removePreview();
+  priceValidationHandler();
+};
+
 const buttonRestartHandler = () => {
   const restartHandler = (evt) => {
     evt.preventDefault();
@@ -103,16 +105,15 @@ const buttonRestartHandler = () => {
 
 formElement.addEventListener(`submit`, (evt) => {
   formSubmitElement.removeEventListener(`click`, roomsValidationHandler);
-  window.upload.dataSendingHandler(new FormData(formElement), () => {
-  });
+  window.backend.save(new FormData(formElement), window.message.successShowHandler, window.message.errorShowHandler);
   evt.preventDefault();
 });
-
 
 window.form = {
   setActiveElement,
   priceValidationHandler,
   buttonRestartHandler,
-  writeAddress,
+  removePins,
+  removeCard,
   restartPage
 };

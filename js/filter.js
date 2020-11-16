@@ -11,22 +11,20 @@ const filterGuestsElement = document.querySelector(`#housing-guests`);
 window.util.setDisabled(mapFilterElement, true);
 
 let info = [];
-window.load.dataLoadingHandler((data) => {
+window.backend.load((data) => {
   info = data;
   setFilteredPins();
-});
-
-const getFilterPins = (arr) => arr.slice(0, MAX_PIN);
+}, window.backend.getShowErrorElement);
 
 const getFilterHousingType = (element) => {
   return element.offer.type === filterTypeElement.value || filterTypeElement.value === ANY_VALUE;
 };
 
-const getFilterHousingPrice = (price) => {
+const getFilterHousingPrice = (element) => {
   return (filterPriceElement.value === ANY_VALUE ||
-      (price < window.data.Price.MIN && filterPriceElement.value === `low`) ||
-      (price > window.data.Price.MAX && filterPriceElement.value === `high`) ||
-      (price >= window.data.Price.MIN && price <= window.data.Price.MAX && filterPriceElement.value === `middle`));
+      (element.offer.price < window.data.Price.MIN && filterPriceElement.value === `low`) ||
+      (element.offer.price > window.data.Price.MAX && filterPriceElement.value === `high`) ||
+      (element.offer.price >= window.data.Price.MIN && element.offer.price <= window.data.Price.MAX && filterPriceElement.value === `middle`));
 };
 
 const getFilterHousingRooms = (element) => {
@@ -34,9 +32,9 @@ const getFilterHousingRooms = (element) => {
       element.offer.rooms === Number(filterRoomsElement.value);
 };
 
-const getFilterHousingGuests = (guests) => {
+const getFilterHousingGuests = (element) => {
   return filterGuestsElement.value === ANY_VALUE ||
-      guests === Number(filterGuestsElement.value);
+  element.offer.guests === Number(filterGuestsElement.value);
 };
 
 const getFilterHousingFeatures = (elements) => {
@@ -44,20 +42,29 @@ const getFilterHousingFeatures = (elements) => {
   return featuresCheckedElements.every((element) => elements.includes(element.value));
 };
 
-const getRenderMapAd = () => {
-  return getFilterPins(info.filter((ad) => {
-    return getFilterHousingType(ad) &&
-      getFilterHousingPrice(ad.offer.price) &&
-      getFilterHousingRooms(ad) &&
-      getFilterHousingGuests(ad.offer.guests) &&
-      getFilterHousingFeatures(ad.offer.features);
-  }));
+const getFilteredData = () => {
+  let filteredAds = [];
+
+  for (let i = 0; i < info.length; i++) {
+    if (getFilterHousingType(info[i]) &&
+      getFilterHousingPrice(info[i]) &&
+      getFilterHousingRooms(info[i]) &&
+      getFilterHousingGuests(info[i]) &&
+      getFilterHousingFeatures(info[i])) {
+      filteredAds.push(info[i]);
+    }
+    if (filteredAds.length === MAX_PIN) {
+      break;
+    }
+  }
+
+  return filteredAds;
 };
 
 const setFilteredPins = () => {
   const createWidthDebounce = window.debounce(() => {
-    window.main.removePins();
-    window.main.removeCard();
+    window.form.removePins();
+    window.form.removeCard();
     window.main.createElements();
   });
   mapFilterElement.addEventListener(`change`, () => {
@@ -66,5 +73,5 @@ const setFilteredPins = () => {
 };
 
 window.filter = {
-  getRenderMapAd
+  getFilteredData
 };

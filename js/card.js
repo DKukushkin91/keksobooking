@@ -12,6 +12,7 @@ const NumberOfCapacity = {
 
 const escPressHandler = (evt) => {
   if (evt.key === `Escape`) {
+    evt.preventDefault();
     popupCloseHandler();
   }
 };
@@ -70,9 +71,7 @@ const getRenderElement = (card) => {
   cardCloneNode.querySelector(`.popup__photos`).appendChild(getCreatedCardPhotos(card.offer.photos));
   cardCloneNode.querySelector(`.popup__avatar`).src = card.author.avatar;
 
-  closeMapCard.addEventListener(`click`, () => {
-    popupCloseHandler();
-  });
+  closeMapCard.addEventListener(`click`, popupCloseHandler);
 
   return cardCloneNode;
 };
