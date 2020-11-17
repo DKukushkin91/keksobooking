@@ -10,6 +10,17 @@ const filterGuestsElement = document.querySelector(`#housing-guests`);
 
 window.util.setDisabled(mapFilterElement, true);
 
+const setFilteredPins = () => {
+  const createWidthDebounce = window.debounce(() => {
+    window.form.removePins();
+    window.form.removeCard();
+    window.main.createElements();
+  });
+  mapFilterElement.addEventListener(`change`, () => {
+    createWidthDebounce();
+  });
+};
+
 let info = [];
 window.backend.load((data) => {
   info = data;
@@ -45,13 +56,13 @@ const getFilterHousingFeatures = (elements) => {
 const getFilteredData = () => {
   let filteredAds = [];
 
-  for (let i = 0; i < info.length; i++) {
-    if (getFilterHousingType(info[i]) &&
-      getFilterHousingPrice(info[i]) &&
-      getFilterHousingRooms(info[i]) &&
-      getFilterHousingGuests(info[i]) &&
-      getFilterHousingFeatures(info[i])) {
-      filteredAds.push(info[i]);
+  for (let arr of info) {
+    if (getFilterHousingType(arr) &&
+      getFilterHousingPrice(arr) &&
+      getFilterHousingRooms(arr) &&
+      getFilterHousingGuests(arr) &&
+      getFilterHousingFeatures(arr)) {
+      filteredAds.push(arr);
     }
     if (filteredAds.length === MAX_PIN) {
       break;
@@ -59,17 +70,6 @@ const getFilteredData = () => {
   }
 
   return filteredAds;
-};
-
-const setFilteredPins = () => {
-  const createWidthDebounce = window.debounce(() => {
-    window.form.removePins();
-    window.form.removeCard();
-    window.main.createElements();
-  });
-  mapFilterElement.addEventListener(`change`, () => {
-    createWidthDebounce();
-  });
 };
 
 window.filter = {
