@@ -27,48 +27,39 @@ window.backend.load((data) => {
   setFilteredPins();
 }, window.backend.getShowErrorElement);
 
-const getFilterHousingType = (element) => {
-  return element.offer.type === filterTypeElement.value || filterTypeElement.value === ANY_VALUE;
-};
+const getFilterHousingType = (type) => type === filterTypeElement.value || filterTypeElement.value === ANY_VALUE;
 
-const getFilterHousingPrice = (element) => {
+const getFilterHousingPrice = (price) => {
   return (filterPriceElement.value === ANY_VALUE ||
-      (element.offer.price < window.data.Price.MIN && filterPriceElement.value === `low`) ||
-      (element.offer.price > window.data.Price.MAX && filterPriceElement.value === `high`) ||
-      (element.offer.price >= window.data.Price.MIN && element.offer.price <= window.data.Price.MAX && filterPriceElement.value === `middle`));
+      (price < window.data.Price.MIN && filterPriceElement.value === `low`) ||
+      (price > window.data.Price.MAX && filterPriceElement.value === `high`) ||
+      (price >= window.data.Price.MIN && price <= window.data.Price.MAX && filterPriceElement.value === `middle`));
 };
 
-const getFilterHousingRooms = (element) => {
-  return filterRoomsElement.value === ANY_VALUE ||
-      element.offer.rooms === Number(filterRoomsElement.value);
-};
+const getFilterHousingRooms = (rooms) => filterRoomsElement.value === ANY_VALUE || rooms === Number(filterRoomsElement.value);
 
-const getFilterHousingGuests = (element) => {
-  return filterGuestsElement.value === ANY_VALUE ||
-  element.offer.guests === Number(filterGuestsElement.value);
-};
+const getFilterHousingGuests = (guests) => filterGuestsElement.value === ANY_VALUE || guests === Number(filterGuestsElement.value);
 
-const getFilterHousingFeatures = (elements) => {
+const getFilterHousingFeatures = (features) => {
   const featuresCheckedElements = Array.from(mapFilterElement.querySelectorAll(`input[type="checkbox"]:checked`));
-  return featuresCheckedElements.every((element) => elements.includes(element.value));
+  return featuresCheckedElements.every((element) => features.includes(element.value));
 };
 
 const getFilteredData = () => {
-  let filteredAds = [];
+  const filteredAds = [];
 
-  for (let arr of info) {
-    if (getFilterHousingType(arr) &&
-      getFilterHousingPrice(arr) &&
-      getFilterHousingRooms(arr) &&
-      getFilterHousingGuests(arr) &&
-      getFilterHousingFeatures(arr)) {
-      filteredAds.push(arr);
+  for (let obj of info) {
+    if (getFilterHousingType(obj.offer.type) &&
+      getFilterHousingPrice(obj.offer.price) &&
+      getFilterHousingRooms(obj.offer.rooms) &&
+      getFilterHousingGuests(obj.offer.guests) &&
+      getFilterHousingFeatures(obj.offer.features)) {
+      filteredAds.push(obj);
     }
     if (filteredAds.length === MAX_PIN) {
       break;
     }
   }
-
   return filteredAds;
 };
 

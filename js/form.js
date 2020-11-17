@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 'use strict';
 
 const formRoomElement = document.querySelector(`#room_number`);
@@ -8,7 +9,7 @@ const formElement = document.querySelector(`.ad-form`);
 const formResetElement = formElement.querySelector(`.ad-form__reset`);
 const formSubmitElement = formElement.querySelector(`.ad-form__submit`);
 
-window.util.setDisabled(formElement.querySelectorAll(`fieldset`), true);
+window.util.setDisabled(formElement, true);
 
 const setActiveElement = () => {
   formElement.classList.remove(`ad-form--disabled`);
@@ -22,7 +23,7 @@ const roomsValidationHandler = () => {
   formRoomElement.setCustomValidity(validationMessage);
 };
 
-formSubmitElement.addEventListener(`click`, roomsValidationHandler);
+formSubmitElement.removeEventListener(`click`, roomsValidationHandler);
 
 const setElementAttribute = (element, attribute, value) => {
   element.setAttribute(attribute, value);
@@ -81,11 +82,11 @@ const restartPage = () => {
   const mapFilters = document.querySelector(`.map__filters`);
   formElement.reset();
   mapFilters.reset();
+  window.util.setDisabled(formElement, true);
+  window.util.setDisabled(mapFilters, true);
   formElement.classList.add(`ad-form--disabled`);
   document.querySelector(`.map`).classList.add(`map--faded`);
   removePins();
-  window.util.setDisabled(formElement.querySelectorAll(`fieldset`), true);
-  window.util.setDisabled(mapFilters, true);
   removeCard();
   document.querySelector(`.map__pin--main`).addEventListener(`mousedown`, window.pins.pinActivePageHandler);
   window.pins.setElementStart();
@@ -104,10 +105,10 @@ const buttonRestartHandler = () => {
 };
 
 formElement.addEventListener(`submit`, (evt) => {
-  formSubmitElement.removeEventListener(`click`, roomsValidationHandler);
   window.backend.save(new FormData(formElement), window.message.successShowHandler, window.message.errorShowHandler);
   evt.preventDefault();
 });
+formSubmitElement.addEventListener(`click`, roomsValidationHandler);
 
 window.form = {
   setActiveElement,

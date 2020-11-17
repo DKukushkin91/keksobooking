@@ -11,8 +11,8 @@ const writeAddress = (addressX, addressY) => {
 };
 
 const setElementCoordinate = () => {
-  writeAddress(mapMainPinElement.offsetLeft + Math.floor(window.data.PinSize.WIDTH / 2),
-      mapMainPinElement.offsetTop + window.data.PinSize.WIDTH + window.data.TailSize.HEIGHT);
+  writeAddress(mapMainPinElement.offsetLeft + Math.floor(window.data.MAIN_PIN_SIZE / 2),
+      mapMainPinElement.offsetTop + window.data.MAIN_PIN_SIZE + window.data.TailSize.HEIGHT);
 };
 
 const setElementStart = () => {
@@ -28,7 +28,8 @@ const removeActiveElement = () => {
 };
 
 const loadPinCoordinate = () => {
-  writeAddress(mapMainPinElement.offsetLeft + Math.floor(window.data.PinSize.WIDTH / 2), mapMainPinElement.offsetTop + Math.floor(window.data.PinSize.WIDTH / 2));
+  writeAddress(mapMainPinElement.offsetLeft + Math.floor(window.data.MAIN_PIN_SIZE / 2),
+      mapMainPinElement.offsetTop + Math.floor(window.data.MAIN_PIN_SIZE / 2));
 };
 
 loadPinCoordinate();
@@ -37,8 +38,8 @@ const getRenderElement = (pin) => {
   const pinElement = pinCloneNode.querySelector(`img`);
   pinElement.src = pin.author.avatar;
   pinElement.alt = pin.offer.title;
-  pinCloneNode.style.left = `${pin.location.x - window.data.SmallPin.WIDTH}px`;
-  pinCloneNode.style.top = `${pin.location.y - window.data.SmallPin.HEIGHT}px`;
+  pinCloneNode.style.left = `${pin.location.x + window.data.SmallPin.WIDTH / 2}px`;
+  pinCloneNode.style.top = `${pin.location.y + window.data.SmallPin.HEIGHT}px`;
   return pinCloneNode;
 };
 
@@ -51,8 +52,8 @@ const pinActivePageHandler = (evt) => {
 };
 
 const getCheckXPin = (x) => {
-  const maxX = window.data.MapX.MAX - window.data.PinSize.WIDTH / 2;
-  const minX = window.data.MapX.MIN - Math.floor(window.data.PinSize.WIDTH / 2);
+  const maxX = window.data.MapX.MAX - window.data.MAIN_PIN_SIZE / 2;
+  const minX = window.data.MapX.MIN - Math.floor(window.data.MAIN_PIN_SIZE / 2);
   if (x > maxX) {
     return maxX;
   }
@@ -64,13 +65,16 @@ const getCheckXPin = (x) => {
 };
 
 const getCheckYPin = (y) => {
-  const minY = window.data.MapY.MIN - window.data.PinSize.WIDTH - window.data.TailSize.HEIGHT;
-  if (y > window.data.MapY.MAX) {
-    return window.data.MapY.MAX;
+  const getCheckPinCoordinate = (element) => {
+    return element - window.data.MAIN_PIN_SIZE - window.data.TailSize.HEIGHT;
+  };
+
+  if (y > getCheckPinCoordinate(window.data.MapY.MAX)) {
+    return getCheckPinCoordinate(window.data.MapY.MAX);
   }
 
-  if (y < minY) {
-    return minY;
+  if (y < getCheckPinCoordinate(window.data.MapY.MIN)) {
+    return getCheckPinCoordinate(window.data.MapY.MIN);
   }
   return y;
 };

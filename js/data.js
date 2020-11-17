@@ -1,5 +1,7 @@
 'use strict';
 
+const MAIN_PIN_SIZE = 65;
+
 const PinStart = {
   X: 570,
   Y: 375
@@ -8,12 +10,6 @@ const PinStart = {
 const SmallPin = {
   WIDTH: 50,
   HEIGHT: 70
-}
-
-const PinSize = {
-  WIDTH: 65,
-  HEIGHT: 65,
-  POINTER: 5
 };
 
 const TailSize = {
@@ -27,8 +23,8 @@ const MapX = {
 };
 
 const MapY = {
-  MIN: 138,
-  MAX: 551
+  MIN: 130,
+  MAX: 630
 };
 
 const Price = {
@@ -56,7 +52,7 @@ const offerType = {
 };
 
 window.data = {
-  PinSize,
+  MAIN_PIN_SIZE,
   Price,
   Room,
   MinPrice,

@@ -7,7 +7,9 @@ const mapPinListElement = document.querySelector(`.map__pins`);
 const setMapActive = () => {
   mapElement.classList.remove(`map--faded`);
 };
+
 window.filter.getFilteredData();
+
 const createElements = () => {
   const fragmentPin = document.createDocumentFragment();
   for (let pin of window.filter.getFilteredData()) {
@@ -35,8 +37,7 @@ const setActivePage = () => {
   createElements();
   setMapActive();
   window.util.setDisabled(document
-    .querySelector(`.ad-form`)
-    .querySelectorAll(`fieldset`), false);
+    .querySelector(`.ad-form`), false);
   window.util.setDisabled(document
     .querySelector(`.map__filters`), false);
   window.form.setActiveElement();

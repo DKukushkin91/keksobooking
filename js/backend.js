@@ -47,41 +47,27 @@ const serverRequestHandler = (URL, method, data, onLoad, onError) => {
     switch (xhr.status) {
       case StatusCode.OK:
         onLoad(xhr.response);
-        document.addEventListener(`keydown`, window.message.escPressHandler);
-        document.addEventListener(`click`, window.message.successHideHandler);
         break;
       case StatusCode.BAD:
         onError(`Неправильный запрос.  Код ошибки ${xhr.status}`);
-        document.addEventListener(`keydown`, window.message.escPressHandler);
-        document.addEventListener(`click`, window.message.errorHideHandler);
         break;
       case StatusCode.NOT_FOUND:
         onError(`Страница не найдена. Код ошибки ${xhr.status}`);
-        document.addEventListener(`keydown`, window.message.escPressHandler);
-        document.addEventListener(`click`, window.message.errorHideHandler);
         break;
       case StatusCode.ERROR:
         onError(`Внутренняя ошибка сервера. Код ошибки ${xhr.status}`);
-        document.addEventListener(`keydown`, window.message.escPressHandler);
-        document.addEventListener(`click`, window.message.errorHideHandler);
         break;
       default:
         onError(`При загрузке произошла ошибка ${xhr.status} . Повторите попытку позже.`);
-        document.addEventListener(`keydown`, window.message.escPressHandler);
-        document.addEventListener(`click`, window.message.errorHideHandler);
     }
   });
 
   xhr.addEventListener(`error`, () => {
     onError(getShowErrorElement(`Произошла ошибка соединения`));
-    document.addEventListener(`keydown`, window.message.escPressHandler);
-    document.addEventListener(`click`, window.message.errorHideHandler);
   });
 
   xhr.addEventListener(`timeout`, () => {
     onError(getShowErrorElement(`Запрос не успел выполниться за ${xhr.timeout} мс`));
-    document.addEventListener(`keydown`, window.message.escPressHandler);
-    document.addEventListener(`click`, window.message.errorHideHandler);
   });
 
   xhr.send(data);
