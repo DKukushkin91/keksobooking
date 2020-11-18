@@ -1,4 +1,3 @@
-
 'use strict';
 
 const URL_SAVE = `https://21.javascript.pages.academy/keksobooking`;

@@ -38,8 +38,8 @@ const getRenderElement = (pin) => {
   const pinElement = pinCloneNode.querySelector(`img`);
   pinElement.src = pin.author.avatar;
   pinElement.alt = pin.offer.title;
-  pinCloneNode.style.left = `${pin.location.x + window.data.SmallPin.WIDTH / 2}px`;
-  pinCloneNode.style.top = `${pin.location.y + window.data.SmallPin.HEIGHT}px`;
+  pinCloneNode.style.left = `${pin.location.x - window.data.SmallPin.WIDTH / 2}px`;
+  pinCloneNode.style.top = `${pin.location.y - window.data.SmallPin.HEIGHT / 2}px`;
   return pinCloneNode;
 };
 
