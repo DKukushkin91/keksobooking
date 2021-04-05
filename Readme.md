@@ -7,4 +7,4 @@
   <li>JS(es5, es6)</li>
 </ul>
 <p>Запуск проекта командой npm start</p>
-Проект на <a href="https://dkukushkin91.github.io/599015-keksobooking-21/">github-pages</a>
+Проект на <a href="https://keksobooking-js.vercel.app/">vercel</a>
