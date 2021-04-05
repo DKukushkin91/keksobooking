@@ -24,6 +24,6 @@
     "watch": "webpack --watch"
   },
   "engines": {
-    "node": "8.11"
+    "node": "^8.11"
   }
 }
